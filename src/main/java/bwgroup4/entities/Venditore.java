@@ -8,7 +8,6 @@ import jakarta.persistence.*;
 public abstract class Venditore {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-
     protected int id;
     protected String nome;
 

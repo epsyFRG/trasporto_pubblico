@@ -13,4 +13,12 @@ public class PuntoVendita extends Venditore {
     public PuntoVendita(String nome){
         super(nome);
     }
+
+    @Override
+    public String toString() {
+        return "PuntoVendita{" +
+                "id=" + id +
+                ", nome='" + nome + '\'' +
+                "} " + super.toString();
+    }
 }

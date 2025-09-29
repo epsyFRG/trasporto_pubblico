@@ -13,6 +13,7 @@
         <class>bwgroup4.entities.Corse</class>
         <class>bwgroup4.entities.Manutenzioni</class>
         <class>bwgroup4.entities.Tratta</class>
+        <class>bwgroup4.entities.Vidimazioni</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/trasportopubblico"/>
             <!-- Dopo l'ultimo slash devo inserire il nome del database (QUESTO DEVE ESISTERE PERO') -->

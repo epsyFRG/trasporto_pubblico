@@ -1,6 +1,8 @@
 package bwgroup4.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import jakarta.persistence.*;
 import java.util.List;
 
 
@@ -22,10 +24,10 @@ public class Mezzi {
 
     // relazioni
 
-    @OneToMany(mappedBy = "mezzo")
+    @OneToMany(mappedBy = "mezzi")
     private List<Manutenzioni> manutenzioni;
 
-    @OneToMany(mappedBy = "mezzo")
+    @OneToMany(mappedBy = "mezzi")
     private List<Corse> corse;
 
     // costruttori

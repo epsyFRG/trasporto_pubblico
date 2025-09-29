@@ -1,6 +1,8 @@
 package bwgroup4.entities;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+
+import jakarta.persistence.*;
 import java.time.Duration;
 import java.time.LocalDateTime;
 

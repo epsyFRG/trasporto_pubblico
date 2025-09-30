@@ -138,7 +138,7 @@ public class Application {
         Manutenzioni man1 = new Manutenzioni("cambio olio", LocalDateTime.of(2025, 2,1, 0,0), LocalDateTime.of(2025, 3, 1, 0,0), mezFromDb);
         //manDao.save(man1);
 
-        
+
 
 
 

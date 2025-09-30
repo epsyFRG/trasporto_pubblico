@@ -42,6 +42,19 @@ public class Mezzi {
         this.capienza = capienza;
     }
 
+    public Mezzi(String targaPK, TipoMezzi tipo) {
+        this.targaPK = targaPK;
+        this.tipo = tipo;
+        if(tipo==TipoMezzi.TRAM){
+            this.capienza=30;
+        } else if(tipo== TipoMezzi.AUTOBUS){
+            this.capienza=35;
+        } else{
+            this.capienza=40;
+        }
+    }
+
+
     // getter e setter per relazioni
 
     public List<Manutenzioni> getManutenzioni() {

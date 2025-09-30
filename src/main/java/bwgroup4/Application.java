@@ -18,6 +18,12 @@ public class Application {
         CorseDAO cDao = new CorseDAO(em);
         MezziDAO mDao = new MezziDAO(em);
         TrattaDAO tDao = new TrattaDAO(em);
+        BigliettoDAO bDao = new BigliettoDAO(em);
+        AbbonamentoDAO abDao = new AbbonamentoDAO(em);
+        TesseraDAO tesDao = new TesseraDAO(em);
+        VidimazioniDAO vidDao = new VidimazioniDAO(em);
+        PuntoVenditaDAO pvDao = new PuntoVenditaDAO(em);
+        DistAutoDAO daDao = new DistAutoDAO(em);
 
 //        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
 //        tDao.save(tratta1);
@@ -100,12 +106,32 @@ public class Application {
         double test = cDao.findAvgByMezzo(1);
         System.out.println(test);
 
-
-
+        java.util.Scanner scanner = new java.util.Scanner(System.in);
+        boolean running = true;
+        while (running) {
+            System.out.println("\n--- Sistema Trasporto Pubblico ---");
+            System.out.println("1. Utente semplice");
+            System.out.println("2. Amministratore");
+            System.out.println("3. Esci");
+            System.out.print("Scegli il tipo di utente: ");
+            String scelta = scanner.nextLine();
+            switch (scelta) {
+                case "1":
+                    new ClientMenu(scanner, bigliettoDAO, abbonamentoDAO, tesseraDAO, vidimazioniDAO, puntoVenditaDAO, distAutoDAO).start();
+                    break;
+                case "2":
+                    new AdminMenu(scanner).start();
+                    break;
+                case "3":
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Opzione non valida.");
+            }
+        }
+        scanner.close();
         em.close();
         emf.close();
-
-
-        System.out.println("Hello World!");
     }
+
 }

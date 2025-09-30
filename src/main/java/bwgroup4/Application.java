@@ -6,6 +6,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 public class Application {
@@ -108,6 +109,7 @@ public class Application {
         DistAutoDAO disDao= new DistAutoDAO(em);
         BigliettoDAO biglDao= new BigliettoDAO(em);
         VidimazioniDAO viDao= new VidimazioniDAO(em);
+        ManutenzioniDAO manDao=new ManutenzioniDAO(em);
 
         Persona per1 = new Persona("pippo", "lkjk",false);
         //pd.save(per1);
@@ -133,8 +135,13 @@ public class Application {
         Vidimazioni v1= new Vidimazioni(mezFromDb,biglFromDb);
         //viDao.save(v1);
 
+        Manutenzioni man1 = new Manutenzioni("cambio olio", LocalDateTime.of(2025, 2,1, 0,0), LocalDateTime.of(2025, 3, 1, 0,0), mezFromDb);
+        //manDao.save(man1);
 
         
+
+
+
 
 
 

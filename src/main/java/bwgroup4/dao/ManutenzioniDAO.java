@@ -5,6 +5,9 @@ import bwgroup4.entities.Manutenzioni;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+
+import java.util.List;
 
 public class ManutenzioniDAO {
     private EntityManager em;
@@ -30,5 +33,11 @@ public class ManutenzioniDAO {
         em.getTransaction().begin();
         em.remove(found);
         em.getTransaction().commit();
+    }
+
+    public List<Manutenzioni> getManuPerMezzo(long id){
+        TypedQuery<Manutenzioni> query = em.createQuery("SELECT m FROM Manutenzioni m WHERE m.mezzi.id = :id", Manutenzioni.class);
+        query.setParameter("id", id);
+        return query.getResultList();
     }
 }

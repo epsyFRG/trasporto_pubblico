@@ -2,10 +2,22 @@
 <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.2"
              xmlns="http://xmlns.jcp.org/xml/ns/persistence"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_2.xsd">
-    <persistence-unit name="trasportopubblicoPU">
-
+    <persistence-unit name="trasportopubblico">
+        <class>bwgroup4.entities.Persona</class>
+        <class>bwgroup4.entities.Venditore</class>
+        <class>bwgroup4.entities.PuntoVendita</class>
+        <class>bwgroup4.entities.DistAuto</class>
+        <class>bwgroup4.entities.Abbonamento</class>
+        <class>bwgroup4.entities.Biglietto</class>
+        <class>bwgroup4.entities.Mezzi</class>
+        <class>bwgroup4.entities.Corse</class>
+        <class>bwgroup4.entities.Manutenzioni</class>
+        <class>bwgroup4.entities.Tratta</class>
+        <class>bwgroup4.entities.Vidimazioni</class>
+        <class>bwgroup4.entities.Tessera</class>
         <properties>
             <property name="jakarta.persistence.jdbc.url" value="jdbc:postgresql://localhost:5432/trasportopubblico"/>
+            <!-- Dopo l'ultimo slash devo inserire il nome del database (QUESTO DEVE ESISTERE PERO') -->
             <property name="jakarta.persistence.jdbc.user" value="postgres"/>
             <property name="jakarta.persistence.jdbc.password" value="1234"/>
             <property name="jakarta.persistence.jdbc.driver" value="org.postgresql.Driver"/>

@@ -9,8 +9,8 @@ import java.time.LocalDate;
 public class Persona {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "numero_tessera")
-    private int tessera;
+    @Column(name = "id")
+    private int id;
     private String nome;
     private String cognome;
     @Column(name = "è_admin")
@@ -27,8 +27,8 @@ public class Persona {
         this.isAdmin=admin;
     }
 
-    public int getTessera() {
-        return tessera;
+    public int getId() {
+        return id;
     }
 
     public String getNome() {
@@ -66,7 +66,7 @@ public class Persona {
     @Override
     public String toString() {
         return "Persona{" +
-                "tessera=" + tessera +
+                "tessera=" + id +
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", isAdmin=" + isAdmin +

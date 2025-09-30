@@ -11,11 +11,14 @@ public class Manutenzioni {
 
     @Id
     @Column(name = "id_mezzo")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
     @Column(name = "data_inizio")
     private LocalDateTime dataInizio;
     @Column(name = "data_fine")
     private LocalDateTime dataFine;
+    @Column(name = "descrizione")
+    private String descrizione;
 
     @ManyToOne
     @JoinColumn
@@ -24,10 +27,10 @@ public class Manutenzioni {
     public Manutenzioni() {
     }
 
-    public Manutenzioni(Long Id, LocalDateTime dataInizio, LocalDateTime dataFine, Mezzi mezzi) {
+    public Manutenzioni(String descrizione, LocalDateTime dataInizio, LocalDateTime dataFine, Mezzi mezzi) {
 
         this.mezzi = mezzi;
-        this.Id = Id;
+        this.descrizione=descrizione;
         this.dataInizio = dataInizio;
         this.dataFine = dataFine;
     }

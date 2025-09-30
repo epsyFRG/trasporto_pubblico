@@ -17,8 +17,8 @@ public class Abbonamento {
     private LocalDate dataScadenza;
 
     @OneToOne
-    @JoinColumn(name = "tessera_utente")
-    private Persona persona;
+    @JoinColumn(name = "codice_tessera")
+    private Tessera tessera;
 
     @ManyToOne
     @JoinColumn(name = "emittente")
@@ -26,8 +26,8 @@ public class Abbonamento {
 
     public Abbonamento(){}
 
-    public Abbonamento(Venditore venditore,Persona utente, boolean mensile){
-        this.persona=utente;
+    public Abbonamento(Venditore venditore,Tessera tessera, boolean mensile){
+        this.tessera=tessera;
         this.emittente=venditore;
         LocalDate today=LocalDate.now();
         this.dataEmissione=today;
@@ -50,8 +50,8 @@ public class Abbonamento {
         return dataScadenza;
     }
 
-    public Persona getPersona() {
-        return persona;
+    public Tessera getTessera() {
+        return tessera;
     }
 
     public Venditore getEmittente() {
@@ -66,8 +66,8 @@ public class Abbonamento {
         this.dataScadenza = dataScadenza;
     }
 
-    public void setPersona(Persona persona) {
-        this.persona = persona;
+    public void setTessera(Tessera tessera) {
+        this.tessera = tessera;
     }
 
     public void setEmittente(Venditore emittente) {
@@ -80,7 +80,7 @@ public class Abbonamento {
                 "codiceUnivoco=" + codiceUnivoco +
                 ", dataEmissione=" + dataEmissione +
                 ", dataScadenza=" + dataScadenza +
-                ", persona=" + persona +
+                ", persona=" + tessera +
                 ", emittente=" + emittente +
                 '}';
     }

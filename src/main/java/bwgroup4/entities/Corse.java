@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public class Corse {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(optional = false)

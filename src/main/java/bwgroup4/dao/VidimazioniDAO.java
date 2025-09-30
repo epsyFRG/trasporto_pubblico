@@ -21,21 +21,29 @@ public class VidimazioniDAO {
 
     public void save (Vidimazioni a){
         Biglietto b = a.getBiglietto();
-        Vidimazioni found = this.findByBiglietto(b);
-        if(found==null){
-        EntityTransaction tr = em.getTransaction();
-        tr.begin();
-        em.persist(a);
-        tr.commit();
-            System.out.println("biglietto vidimato");
-        }
-        else{
+        Vidimazioni found=null;
+        try {
+             found = this.findByBiglietto(b);
             System.out.println("il biglietto è già stato vidimato");
+        } catch (Exception ex){
+            if(found==null){
+                EntityTransaction tr = em.getTransaction();
+                tr.begin();
+                em.persist(a);
+                tr.commit();
+                System.out.println("biglietto vidimato");
+            }
+
         }
+
     }
 
     public Vidimazioni findByBiglietto(Biglietto biglietto){
-        Vidimazioni found = em.find(Vidimazioni.class, biglietto);
+       // Vidimazioni found = em.find(Vidimazioni.class, biglietto);
+        Vidimazioni found=null;
+        TypedQuery<Vidimazioni> query = em.createQuery("SELECT v FROM Vidimazioni v WHERE v.biglietto.codiceUnivoco = :id", Vidimazioni.class);
+        query.setParameter("id", biglietto.getCodiceUnivoco() );
+        found=query.getSingleResult();
         if (found == null) throw new NotFoundException(biglietto.getCodiceUnivoco());
         return found;
     }
@@ -65,5 +73,11 @@ public class VidimazioniDAO {
         query.setParameter("dFinish", dFinish);
         return query.getResultList();
 
+    }
+
+    public List<Vidimazioni> getVidsPerMezzo(long idMezzo){
+        TypedQuery<Vidimazioni> query= em.createQuery("SELECT v FROM Vidimazioni v WHERE v.mezzo.id = :id", Vidimazioni.class);
+        query.setParameter("id", idMezzo);
+        return query.getResultList();
     }
 }

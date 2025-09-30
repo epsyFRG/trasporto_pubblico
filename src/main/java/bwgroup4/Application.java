@@ -106,6 +106,8 @@ public class Application {
         TesseraDAO td= new TesseraDAO(em);
         AbbonamentoDAO abd=new AbbonamentoDAO(em);
         DistAutoDAO disDao= new DistAutoDAO(em);
+        BigliettoDAO biglDao= new BigliettoDAO(em);
+        VidimazioniDAO viDao= new VidimazioniDAO(em);
 
         Persona per1 = new Persona("pippo", "lkjk",false);
         //pd.save(per1);
@@ -120,7 +122,22 @@ public class Application {
         Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
         //abd.save(ab1);
 
-        td.verificaAbb(2);
+        Biglietto bigl1= new Biglietto(distFromDb);
+        //biglDao.save(bigl1);
+        Biglietto biglFromDb=biglDao.findById(1);
+
+        Mezzi mezzo1 = new Mezzi("CIAO", TipoMezzi.AUTOBUS, 30);
+       // mDao.save(mezzo1);
+        Mezzi mezFromDb=mDao.findById(1);
+
+        Vidimazioni v1= new Vidimazioni(mezFromDb,biglFromDb);
+        //viDao.save(v1);
+
+
+        
+
+
+
 
 
 

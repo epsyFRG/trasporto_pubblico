@@ -6,6 +6,7 @@ import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
+import jakarta.persistence.TypedQuery;
 
 import java.util.List;
 
@@ -37,5 +38,12 @@ public class CorseDAO {
         Query query=em.createQuery("SELECT AVG(c.durataSec) FROM Corse c WHERE c.mezzi.id = :idMezzo");
         query.setParameter("idMezzo",idMezzo);
         return (Double) query.getSingleResult();
+    }
+
+    public int numCorsePerMezzo(int id){
+        TypedQuery<Corse> query = em.createQuery("SELECT c FROM Corse c WHERE c.mezzi.id = :id", Corse.class);
+        query.setParameter("id", id);
+        return query.getResultList().size();
+
     }
 }

@@ -1,31 +1,31 @@
 package bwgroup4.dao;
 
-import bwgroup4.entities.PuntoVendita;
+import bwgroup4.entities.Tessera;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 
-public class PuntoVenditaDAO {
+public class TesseraDAO {
     private EntityManager em;
 
-    public PuntoVenditaDAO(EntityManager e){
+    public TesseraDAO(EntityManager e){
         this.em=e;
     }
 
-    public void save (PuntoVendita a){
+    public void save (Tessera a){
         EntityTransaction tr = em.getTransaction();
         tr.begin();
         em.persist(a);
         tr.commit();
     }
-    public PuntoVendita findById(int id){
-        PuntoVendita found = em.find(PuntoVendita.class, id);
+    public Tessera findById(int id){
+        Tessera found = em.find(Tessera.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
     public void remove(int id) {
-        PuntoVendita found = this.findById(id);
+        Tessera found = this.findById(id);
         em.getTransaction().begin();
         em.remove(found);
         em.getTransaction().commit();

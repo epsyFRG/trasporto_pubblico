@@ -20,20 +20,28 @@ public class VidimazioniDAO {
     }
 
     public void save (Vidimazioni a){
+        Biglietto b = a.getBiglietto();
+        Vidimazioni found = this.findByBiglietto(b);
+        if(found==null){
         EntityTransaction tr = em.getTransaction();
         tr.begin();
         em.persist(a);
         tr.commit();
+            System.out.println("biglietto vidimato");
+        }
+        else{
+            System.out.println("il biglietto è già stato vidimato");
+        }
     }
-    public Vidimazioni findById(Biglietto biglietto){
 
+    public Vidimazioni findByBiglietto(Biglietto biglietto){
         Vidimazioni found = em.find(Vidimazioni.class, biglietto);
         if (found == null) throw new NotFoundException(biglietto.getCodiceUnivoco());
         return found;
     }
 
     public void delete(Biglietto biglietto) {
-        Vidimazioni found = this.findById(biglietto);
+        Vidimazioni found = this.findByBiglietto(biglietto);
         em.getTransaction().begin();
         em.remove(found);
         em.getTransaction().commit();

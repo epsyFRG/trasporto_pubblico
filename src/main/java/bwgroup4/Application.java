@@ -97,8 +97,7 @@ public class Application {
 //        cDao.save(corsa10);
 
 
-        double test = cDao.findAvgByMezzo(1);
-        System.out.println(test);
+
 
 
 

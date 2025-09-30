@@ -1,5 +1,6 @@
 package bwgroup4.dao;
 
+import bwgroup4.entities.Biglietto;
 import bwgroup4.entities.Vidimazioni;
 import exceptions.NotFoundException;
 import jakarta.persistence.*;
@@ -24,14 +25,15 @@ public class VidimazioniDAO {
         em.persist(a);
         tr.commit();
     }
-    public Vidimazioni findById(int id){
-        Vidimazioni found = em.find(Vidimazioni.class, id);
-        if (found == null) throw new NotFoundException(id);
+    public Vidimazioni findById(Biglietto biglietto){
+
+        Vidimazioni found = em.find(Vidimazioni.class, biglietto);
+        if (found == null) throw new NotFoundException(biglietto.getCodiceUnivoco());
         return found;
     }
 
-    public void delete(int id) {
-        Vidimazioni found = this.findById(id);
+    public void delete(Biglietto biglietto) {
+        Vidimazioni found = this.findById(biglietto);
         em.getTransaction().begin();
         em.remove(found);
         em.getTransaction().commit();

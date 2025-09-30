@@ -21,6 +21,12 @@ public class Vidimazioni {
 
     public Vidimazioni(){}
 
+    public Vidimazioni(Mezzi mezzo, Biglietto biglietto){
+        this.mezzo=mezzo;
+        this.biglietto=biglietto;
+        this.dataVidimazione=LocalDate.now();
+    }
+
     public Biglietto getBiglietto() {
         return biglietto;
     }

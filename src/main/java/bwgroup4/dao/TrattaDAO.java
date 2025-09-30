@@ -1,6 +1,7 @@
 package bwgroup4.dao;
 
 import bwgroup4.entities.Tratta;
+import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.TypedQuery;
 

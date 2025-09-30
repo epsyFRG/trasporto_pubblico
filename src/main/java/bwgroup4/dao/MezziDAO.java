@@ -1,6 +1,7 @@
 package bwgroup4.dao;
 
 import bwgroup4.entities.Mezzi;
+import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.Query;
@@ -23,7 +24,7 @@ public class MezziDAO {
     }
 
     public Mezzi findById(int id){
-        Mezzi found = em.find(Mezzi.class, id);
+        Mezzi found = entityManager.find(Mezzi.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;
     }

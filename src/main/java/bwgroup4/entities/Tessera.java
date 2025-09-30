@@ -10,7 +10,7 @@ public class Tessera {
     @Id
     @Column(name = "codice_tessera")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long codice;
+    private int codice;
 
     @Column(name = "data_scadenza")
     private LocalDate dataScadenza;
@@ -26,7 +26,7 @@ public class Tessera {
         this.dataScadenza=today.plusDays(365);
     }
 
-    public long getCodice() {
+    public int getCodice() {
         return codice;
     }
 

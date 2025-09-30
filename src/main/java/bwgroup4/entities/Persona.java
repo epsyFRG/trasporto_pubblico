@@ -15,15 +15,14 @@ public class Persona {
     private String cognome;
     @Column(name = "è_admin")
     private boolean isAdmin;
-    @Column(name = "data_scadenza_tessera")
-    private LocalDate scadenzaTessera;
+
 
     public Persona(){}
 
-    public Persona(String nome, String cognome, boolean admin, LocalDate scadenza){
+    public Persona(String nome, String cognome, boolean admin){
         this.nome=nome;
         this.cognome=cognome;
-        this.scadenzaTessera=scadenza;
+
         this.isAdmin=admin;
     }
 
@@ -43,9 +42,7 @@ public class Persona {
         return isAdmin;
     }
 
-    public LocalDate getScadenzaTessera() {
-        return scadenzaTessera;
-    }
+
 
     public void setNome(String nome) {
         this.nome = nome;
@@ -59,9 +56,7 @@ public class Persona {
         isAdmin = admin;
     }
 
-    public void setScadenzaTessera(LocalDate scadenzaTessera) {
-        this.scadenzaTessera = scadenzaTessera;
-    }
+
 
     @Override
     public String toString() {
@@ -70,7 +65,7 @@ public class Persona {
                 ", nome='" + nome + '\'' +
                 ", cognome='" + cognome + '\'' +
                 ", isAdmin=" + isAdmin +
-                ", scadenzaTessera=" + scadenzaTessera +
+
                 '}';
     }
 }

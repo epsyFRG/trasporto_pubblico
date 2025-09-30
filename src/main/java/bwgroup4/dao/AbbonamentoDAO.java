@@ -31,4 +31,6 @@ public class AbbonamentoDAO {
         em.remove(found);
         em.getTransaction().commit();
     }
+
+
 }

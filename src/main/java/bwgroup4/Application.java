@@ -11,6 +11,10 @@ import java.time.LocalDateTime;
 public class Application {
 
     static EntityManagerFactory emf= Persistence.createEntityManagerFactory("trasportopubblico");
+
+
+
+
     public static void main(String[] args) {
 
 
@@ -97,6 +101,26 @@ public class Application {
 //        cDao.save(corsa10);
 
 
+
+        PersonaDAO pd= new PersonaDAO(em);
+        TesseraDAO td= new TesseraDAO(em);
+        AbbonamentoDAO abd=new AbbonamentoDAO(em);
+        DistAutoDAO disDao= new DistAutoDAO(em);
+
+        Persona per1 = new Persona("pippo", "lkjk",false);
+        //pd.save(per1);
+        Persona perFromDb= pd.findById(1);
+        Tessera tes1 = new Tessera(perFromDb);
+        //td.save(tes1);
+        Tessera tesFromDb=td.findById(2);
+        DistAuto dist1= new DistAuto("ditributore1",true);
+        //disDao.save(dist1);
+        DistAuto distFromDb = disDao.findById(152);
+
+        Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
+        //abd.save(ab1);
+
+        td.verificaAbb(2);
 
 
 

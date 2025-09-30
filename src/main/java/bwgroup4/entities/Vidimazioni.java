@@ -21,6 +21,31 @@ public class Vidimazioni {
 
     public Vidimazioni(){}
 
+    public Biglietto getBiglietto() {
+        return biglietto;
+    }
 
+    public Mezzi getMezzo() {
+        return mezzo;
+    }
 
+    public LocalDate getDataVidimazione() {
+        return dataVidimazione;
+    }
+
+    public void setDataVidimazione(LocalDate dataVidimazione) {
+        this.dataVidimazione = dataVidimazione;
+    }
+
+    public void setMezzo(Mezzi mezzo) {
+        this.mezzo = mezzo;
+    }
+
+    @Override
+    public String toString() {
+        return "Vidimazioni{" +
+                "dataVidimazione=" + dataVidimazione +
+                ", biglietto=" + biglietto +
+                '}';
+    }
 }

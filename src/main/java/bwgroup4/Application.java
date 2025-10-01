@@ -122,7 +122,6 @@ public class Application {
                 abd.remove(abList.get(i).getCodiceUnivoco());
             }
         }
-
         TypedQuery<Biglietto> bigQuery=em.createQuery("SELECT b FROM Biglietto b WHERE b.emittente.id = :idEmittente", Biglietto.class);
         bigQuery.setParameter("idEmittente",idEmittente);
         List<Biglietto> bigList=bigQuery.getResultList();
@@ -131,7 +130,6 @@ public class Application {
                 deleteBiglietto(bigList.get(i).getCodiceUnivoco());
             }
         }
-
         try{
             venDao.remove(idEmittente);
         } catch(Exception ex){
@@ -222,7 +220,7 @@ public class Application {
 //        cDao.save(corsa10);
 
 
-        
+
 
 
 

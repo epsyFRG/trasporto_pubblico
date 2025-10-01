@@ -33,9 +33,7 @@ public class VidimazioniDAO {
                 tr.commit();
                 System.out.println("biglietto vidimato");
             }
-
         }
-
     }
 
     public Vidimazioni findByBiglietto(Biglietto biglietto){

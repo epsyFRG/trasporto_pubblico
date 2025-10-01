@@ -54,7 +54,6 @@ public class Mezzi {
         }
     }
 
-
     // getter e setter per relazioni
 
     public List<Manutenzioni> getManutenzioni() {

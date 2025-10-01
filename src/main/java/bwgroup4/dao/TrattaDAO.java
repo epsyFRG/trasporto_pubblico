@@ -3,6 +3,7 @@ package bwgroup4.dao;
 import bwgroup4.entities.Tratta;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityTransaction;
 import jakarta.persistence.TypedQuery;
 
 import java.util.List;
@@ -17,7 +18,11 @@ public class TrattaDAO {
     }
     //Salvo una nuova tratta nel database
     public void save(Tratta tratta) {
+        EntityTransaction tr=em.getTransaction();
+        tr.begin();
         em.persist(tratta);
+        tr.commit();
+        System.out.println("tratta salvata");
     }
     //Trovo una tratta tramite Id
     public Tratta findById(int id){

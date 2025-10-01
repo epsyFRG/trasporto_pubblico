@@ -23,12 +23,12 @@ public class CorseDAO {
         em.persist(c);
         tr.commit();
     }
-    public Corse findById(int id){
+    public Corse findById(long id){
         Corse found = em.find(Corse.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;
     }
-    public void remove(int id) {
+    public void remove(long id) {
         Corse found = this.findById(id);
         em.getTransaction().begin();
         em.remove(found);

@@ -22,13 +22,13 @@ public class ManutenzioniDAO {
         em.persist(m);
         tr.commit();
     }
-    public Manutenzioni findById(int id){
+    public Manutenzioni findById(long id){
         Manutenzioni found = em.find(Manutenzioni.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;
     }
 
-    public void remove(int id) {
+    public void remove(long id) {
         Manutenzioni found = this.findById(id);
         em.getTransaction().begin();
         em.remove(found);

@@ -45,6 +45,34 @@ public class Application {
         pd.remove(idPersona);
     }
 
+    public static void deleteMezzo(long idMezzo){
+        TypedQuery<Manutenzioni> manQuery = em.createQuery("SELECT m FROM Manutenzioni m WHERE m.mezzi.id = :idMezzo", Manutenzioni.class);
+        manQuery.setParameter("idMezzo", idMezzo);
+        List<Manutenzioni> manList = manQuery.getResultList();
+        if(!manList.isEmpty()){
+            for(int i=0; i<manList.size(); i++){
+                manDao.remove(manList.get(i).getId());
+            }
+        }
+        TypedQuery<Corse> corsQuery =em.createQuery("SELECT c FROM Corse c WHERE c.mezzi.id = :idMezzo", Corse.class );
+        corsQuery.setParameter("idMezzo", idMezzo);
+        List<Corse>  corsList = corsQuery.getResultList();
+        if(!corsList.isEmpty()){
+            for(int i=0; i<corsList.size(); i++ ){
+                cDao.remove(corsList.get(i).getId());
+            }
+        }
+        TypedQuery<Vidimazioni> vidQuery = em.createQuery("SELECT v FROM Vidimazioni v WHERE v.mezzo.id = :idMezzo", Vidimazioni.class);
+        vidQuery.setParameter("idMezzo",idMezzo );
+        List<Vidimazioni> vidList = vidQuery.getResultList();
+        if(!vidList.isEmpty()){
+            for (int i=0; i<vidList.size(); i++){
+                viDao.delete(vidList.get(i).getBiglietto());
+            }
+        }
+        mDao.delete(idMezzo);
+    }
+
 
     public static void main(String[] args) {
 
@@ -135,15 +163,15 @@ public class Application {
         Persona per1 = new Persona("pippo", "lkjk",false);
         Persona per2 = new Persona("dfgdfg", "lkjk",false);
         //pd.save(per2);
-        Persona perFromDb= pd.findById(1);
-        Tessera tes2 = new Tessera(perFromDb);
+        //Persona perFromDb= pd.findById(1);
+        //Tessera tes2 = new Tessera(perFromDb);
         //td.save(tes1);
-        Tessera tesFromDb=td.findById(2);
+        //Tessera tesFromDb=td.findById(2);
         DistAuto dist1= new DistAuto("ditributore1",true);
         //disDao.save(dist1);
         DistAuto distFromDb = disDao.findById(152);
 
-        Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
+        //Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
         //
         // abd.save(ab1);
 
@@ -179,6 +207,7 @@ public class Application {
         //cDao.save(corsa2);
 
 
+       
 
 
 

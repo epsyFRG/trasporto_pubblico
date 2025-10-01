@@ -155,7 +155,7 @@ public class Application {
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO
     //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
-    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO DA PROVARE
+    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO 
     //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO
     //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO
 

@@ -21,6 +21,7 @@ public class TesseraDAO {
         tr.begin();
         em.persist(a);
         tr.commit();
+        System.out.println("tessera salvata");
     }
     public Tessera findById(int id){
         Tessera found = em.find(Tessera.class, id);

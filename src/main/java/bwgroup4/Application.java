@@ -236,6 +236,7 @@ public class Application {
 //        );
 //        cDao.save(corsa10);
         Scanner scanner = new Scanner(System.in);
+        LocalDate today=LocalDate.now();
 
         String op = "";
         Persona utente = null;
@@ -416,6 +417,7 @@ public class Application {
                     System.out.println("Inserire 2 per biglietto ");
                     System.out.println("Inserire 3 per rinnovare la tessera");
                     System.out.println("Inserire 4 per vidimare il biglietto");
+                    System.out.println("Inserire 5 per fare la tessera");
                     System.out.println("Inserire q per uscire");
                     op=scanner.nextLine();
 
@@ -436,7 +438,13 @@ public class Application {
 
                             try{
                                 Abbonamento a=abd.getAbByTessera(tess);
+                                if(a.getDataScadenza().isAfter(today)){
                                 ok=false;
+                                System.out.println("hai già un abbonamento");}
+                                else {
+                                    abd.remove(a.getCodiceUnivoco());
+                                    ok=true;
+                                }
                             }catch (Exception ex){
                                 ok=true;
                             }
@@ -496,6 +504,18 @@ public class Application {
                             break;
                         case "4":
                             System.out.println("-----");
+                            break;
+                        case "5":
+                            try {
+                                Tessera ts=pd.getTesseraById(utente.getId());
+                                if(ts!=null){
+                                    System.out.println("hai già la tessera");
+                                }
+                            }catch (Exception ex){
+                                Tessera newTess= new Tessera(utente);
+                                td.save(newTess);
+                            }
+
                             break;
                         case "q": break;
                         default:

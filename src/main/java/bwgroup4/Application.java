@@ -112,9 +112,10 @@ public class Application {
         ManutenzioniDAO manDao=new ManutenzioniDAO(em);
 
         Persona per1 = new Persona("pippo", "lkjk",false);
-        //pd.save(per1);
+        Persona per2 = new Persona("dfgdfg", "lkjk",false);
+        pd.save(per2);
         Persona perFromDb= pd.findById(1);
-        Tessera tes1 = new Tessera(perFromDb);
+        Tessera tes2 = new Tessera(perFromDb);
         //td.save(tes1);
         Tessera tesFromDb=td.findById(2);
         DistAuto dist1= new DistAuto("ditributore1",true);
@@ -139,7 +140,24 @@ public class Application {
         //manDao.save(man1);
 
         Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
-        tDao.save(tratta1);
+        //tDao.save(tratta1);
+        Tratta trFromDb=tDao.findById(1);
+
+        Corse corsa1 = new Corse( mezFromDb, trFromDb,
+                LocalDateTime.of(2025, 10, 1, 8, 30),
+                LocalDateTime.of(2025, 10, 1, 9, 15)
+        );
+       // cDao.save(corsa1);
+        Corse corsa2 = new Corse(
+                mezFromDb,
+                trFromDb,
+                LocalDateTime.of(2025, 10, 1, 10, 0),
+                LocalDateTime.of(2025, 10, 1, 10, 25)
+        );
+        //cDao.save(corsa2);
+
+        System.out.println(biglDao.getPerPeriodoAndEmitt(3000, 2025,10,2025,152));
+
 
 
 

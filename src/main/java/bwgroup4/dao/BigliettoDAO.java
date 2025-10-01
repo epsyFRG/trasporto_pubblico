@@ -7,6 +7,12 @@ import bwgroup4.entities.Venditore;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
+
+import java.time.DateTimeException;
+import java.time.LocalDate;
+import java.time.YearMonth;
+import java.util.List;
 
 public class BigliettoDAO {
     private EntityManager em;
@@ -49,5 +55,24 @@ public class BigliettoDAO {
             Biglietto b=new Biglietto(pV);
             this.save(b);
         }
+    }
+
+    public List<Biglietto> getPerPeriodoAndEmitt(int mStart, int anStart, int mFinish, int anFinish, int idEmitt){
+        LocalDate dStart = null;
+        LocalDate dFinish = null;
+        try{
+            dStart=LocalDate.of(anStart,mStart, 1);
+            YearMonth ym=YearMonth.of(anFinish, mFinish);
+            dFinish=ym.atEndOfMonth();
+        } catch(DateTimeException ex){
+            System.out.println("data non valida");
+            return null;
+        }
+        String sql="SELECT b FROM Biglietto b WHERE b.emittente.id = :id AND b.dataEmissione >= :dStart AND b.dataEmissione <= :dFinish";
+        TypedQuery<Biglietto> query=em.createQuery(sql, Biglietto.class);
+        query.setParameter("id",idEmitt );
+        query.setParameter("dStart",dStart );
+        query.setParameter("dFinish",dFinish );
+        return query.getResultList();
     }
 }

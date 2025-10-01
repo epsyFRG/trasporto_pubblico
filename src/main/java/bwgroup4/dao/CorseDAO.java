@@ -34,9 +34,10 @@ public class CorseDAO {
         em.remove(found);
         em.getTransaction().commit();
     }
-    public Double findAvgByMezzo (int idMezzo) {
-        Query query=em.createQuery("SELECT AVG(c.durataSec) FROM Corse c WHERE c.mezzi.id = :idMezzo");
+    public Double findAvgByMezzo (long idMezzo, long idTratta) {
+        Query query=em.createQuery("SELECT AVG(c.durataSec) FROM Corse c WHERE c.mezzi.id = :idMezzo AND c.tratta.id = :idTratta");
         query.setParameter("idMezzo",idMezzo);
+        query.setParameter("idTratta",idTratta);
         return (Double) query.getSingleResult();
     }
 

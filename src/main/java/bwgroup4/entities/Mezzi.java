@@ -12,7 +12,7 @@ public class Mezzi {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
     @Column(name = "targa_pk", nullable = false)
     private String targaPK;
 

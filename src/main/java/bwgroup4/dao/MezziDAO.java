@@ -23,7 +23,7 @@ public class MezziDAO {
         transaction.commit();
     }
 
-    public Mezzi findById(int id){
+    public Mezzi findById(long id){
         Mezzi found = entityManager.find(Mezzi.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;

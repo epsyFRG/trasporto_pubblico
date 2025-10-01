@@ -143,16 +143,17 @@ public class Application {
     //1) metodo getIsAdmin in base a id persona
     //-------------------------------------------
     // utente
-    //1) metodo nuovo abbonamento passando id venditore
-    //2) metodo nuovo biglietto pasando id venditore
+    //1) metodo nuovo abbonamento passando id venditore FATTO
+    //2) metodo nuovo biglietto pasando id venditore FATTO
     //3) metodo setScadenza su tessera se dataScadenza > oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
     //--------------------------------------------
     //admin
-    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
-    //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch)
-    //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch)
+    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO DA PROVARE
+    //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
+    //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
     //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch)
+    //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO DA PROVARE
 
     public static void main(String[] args) {
 
@@ -269,12 +270,69 @@ public class Application {
                     System.out.println("Inserire 2 per verificare un abbonamento ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
+                    System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
                     System.out.println("Inserire q per uscire");
 
                     op= scanner.nextLine();
                     switch(op){
                         case "1":
-                            System.out.println("-----");
+                            //metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
+                            String strIdEm="";
+                            int idEm=0;
+                            int anStart=0, anFinish=0, mStart=0, mFinish=0;
+                            System.out.println("Abbonamenti e biglietti emessi");
+                            System.out.println("inserire l'id dell'emittente (punto vendita o distributore)");
+                            strIdEm=scanner.nextLine();
+                            try{
+                                idEm=Integer.parseInt(strIdEm);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data inizio ricerca");
+                            System.out.println("inserire l'anno (intero)");
+                            try{
+                                anStart= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data inizio ricerca");
+                            System.out.println("inserire il mese (intero da 1 a 12)");
+                            try{
+                                mStart= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data fine ricerca");
+                            System.out.println("inserire l'anno (intero)");
+                            try{
+                                anFinish= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data fine ricerca");
+                            System.out.println("inserire il mese (intero da 1 a 12)");
+                            try{
+                                mFinish= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("Abbonamenti:");
+                            try{
+                            System.out.println(abd.getPerEmitAndPeriodo(mStart,mFinish,anStart,anFinish,idEm));}
+                            catch (Exception ex){
+                                System.out.println("non ci sono risultati per gli abbonamenti");
+                            }
+                            System.out.println("Biglietti:");
+                            try{
+                            System.out.println(biglDao.getPerPeriodoAndEmitt(mStart,anStart,mFinish,anFinish,idEm));}
+                            catch (Exception ex){
+                                System.out.println("non ci sono risultati per i biglietti");
+                            }
                             break;
                         case "2": {
                             try {
@@ -315,6 +373,34 @@ public class Application {
                         case "4":
                             System.out.println("-----");
                             break;
+                        case "5":
+                            long idTratta=0;
+                            long idMez=0;
+                            System.out.println("Durata media effettiva corse");
+                            System.out.println("Inserire l'id della tratta");
+                            try{
+                                idTratta= Long.parseLong(scanner.nextLine());
+                                Tratta trattaProva=tDao.findById(idTratta);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("Inserire l'id del mezzo");
+                            try {
+                                idMez= Long.parseLong(scanner.nextLine());
+                                Mezzi me=mDao.findById(idMez);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            try {
+                                System.out.println("media in secondi della durata di percorrenza:");
+                                System.out.println(cDao.findAvgByMezzo(idMez,idTratta));
+                            }catch (Exception ex){
+                                System.out.println("non ci sono risultati per i parametri inseriti");
+                            }
+                            break;
+                        case "q": break;
                         default:
                             System.out.println("input non valido");
                             break;
@@ -330,7 +416,9 @@ public class Application {
                     System.out.println("Inserire 2 per biglietto ");
                     System.out.println("Inserire 3 per rinnovare la tessera");
                     System.out.println("Inserire 4 per vidimare il biglietto");
+                    System.out.println("Inserire q per uscire");
                     op=scanner.nextLine();
+
                     switch (op) {
                         case "1":
                             int idEm=0;
@@ -374,8 +462,9 @@ public class Application {
                                 break;
                             }
                             Abbonamento ab= new Abbonamento(v,tess,isMens);
-                            abd.save(ab);}
-
+                            abd.save(ab);
+                                System.out.println("abbonamento salvato correttamente");
+                            }
                             break;
                         case "2": {
                             System.out.print("ID venditore : ");
@@ -408,6 +497,7 @@ public class Application {
                         case "4":
                             System.out.println("-----");
                             break;
+                        case "q": break;
                         default:
                             System.out.println("input non valido");
                             break;
@@ -429,6 +519,6 @@ public class Application {
         emf.close();
 
 
-        System.out.println("Hello World!");
+        System.out.println("Bye");
     }
 }

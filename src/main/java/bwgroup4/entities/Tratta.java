@@ -8,7 +8,7 @@ public class Tratta {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @Column(nullable = false)
     private String zonaPartenza;

@@ -25,7 +25,7 @@ public class TrattaDAO {
         System.out.println("tratta salvata");
     }
     //Trovo una tratta tramite Id
-    public Tratta findById(int id){
+    public Tratta findById(long id){
         Tratta found = em.find(Tratta.class, id);
         if (found == null) throw new NotFoundException(id);
         return found;
@@ -36,7 +36,7 @@ public class TrattaDAO {
                 .getResultList();
     }
     //Elimina una tratta dal db,
-    public void delete(int id) {
+    public void delete(long id) {
         Tratta found = this.findById(id);
         em.getTransaction().begin();
         em.remove(found);

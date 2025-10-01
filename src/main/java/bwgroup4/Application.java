@@ -7,8 +7,6 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -46,39 +44,39 @@ public class Application {
         }
         try {
             pd.remove(idPersona);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("id non trovato");
         }
     }
 
-    public static void deleteMezzo(long idMezzo){
+    public static void deleteMezzo(long idMezzo) {
         TypedQuery<Manutenzioni> manQuery = em.createQuery("SELECT m FROM Manutenzioni m WHERE m.mezzi.id = :idMezzo", Manutenzioni.class);
         manQuery.setParameter("idMezzo", idMezzo);
         List<Manutenzioni> manList = manQuery.getResultList();
-        if(!manList.isEmpty()){
-            for(int i=0; i<manList.size(); i++){
+        if (!manList.isEmpty()) {
+            for (int i = 0; i < manList.size(); i++) {
                 manDao.remove(manList.get(i).getId());
             }
         }
-        TypedQuery<Corse> corsQuery =em.createQuery("SELECT c FROM Corse c WHERE c.mezzi.id = :idMezzo", Corse.class );
+        TypedQuery<Corse> corsQuery = em.createQuery("SELECT c FROM Corse c WHERE c.mezzi.id = :idMezzo", Corse.class);
         corsQuery.setParameter("idMezzo", idMezzo);
-        List<Corse>  corsList = corsQuery.getResultList();
-        if(!corsList.isEmpty()){
-            for(int i=0; i<corsList.size(); i++ ){
+        List<Corse> corsList = corsQuery.getResultList();
+        if (!corsList.isEmpty()) {
+            for (int i = 0; i < corsList.size(); i++) {
                 cDao.remove(corsList.get(i).getId());
             }
         }
         TypedQuery<Vidimazioni> vidQuery = em.createQuery("SELECT v FROM Vidimazioni v WHERE v.mezzo.id = :idMezzo", Vidimazioni.class);
-        vidQuery.setParameter("idMezzo",idMezzo );
+        vidQuery.setParameter("idMezzo", idMezzo);
         List<Vidimazioni> vidList = vidQuery.getResultList();
-        if(!vidList.isEmpty()){
-            for (int i=0; i<vidList.size(); i++){
+        if (!vidList.isEmpty()) {
+            for (int i = 0; i < vidList.size(); i++) {
                 viDao.delete(vidList.get(i).getBiglietto());
             }
         }
         try {
             mDao.delete(idMezzo);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("id non trovato");
         }
     }
@@ -94,47 +92,47 @@ public class Application {
         }
         try {
             tDao.delete(idTratta);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println("id non trovato");
         }
     }
 
-    public static void deleteBiglietto(int codice){
-        TypedQuery <Vidimazioni> vidQuery=em.createQuery("SELECT v FROM Vidimazioni v WHERE v.biglietto.codiceUnivoco = :codice", Vidimazioni.class);
+    public static void deleteBiglietto(int codice) {
+        TypedQuery<Vidimazioni> vidQuery = em.createQuery("SELECT v FROM Vidimazioni v WHERE v.biglietto.codiceUnivoco = :codice", Vidimazioni.class);
         vidQuery.setParameter("codice", codice);
         List<Vidimazioni> vidList = vidQuery.getResultList();
-        if(!vidList.isEmpty()){
-            Vidimazioni v=vidList.getFirst();
+        if (!vidList.isEmpty()) {
+            Vidimazioni v = vidList.getFirst();
             viDao.delete(v.getBiglietto());
         }
-        try{
-           biglDao.remove(codice);
-        } catch (Exception ex){
+        try {
+            biglDao.remove(codice);
+        } catch (Exception ex) {
             System.out.println("codice non trovato");
         }
 
     }
 
-    public static void deleteEmittente(int idEmittente){
-        TypedQuery<Abbonamento> abQuery=em.createQuery("SELECT a FROM Abbonamento a WHERE a.emittente.id = :idEmittente", Abbonamento.class);
+    public static void deleteEmittente(int idEmittente) {
+        TypedQuery<Abbonamento> abQuery = em.createQuery("SELECT a FROM Abbonamento a WHERE a.emittente.id = :idEmittente", Abbonamento.class);
         abQuery.setParameter("idEmittente", idEmittente);
-        List<Abbonamento> abList=abQuery.getResultList();
-        if(!abList.isEmpty()){
-            for(int i=0; i<abList.size(); i++){
+        List<Abbonamento> abList = abQuery.getResultList();
+        if (!abList.isEmpty()) {
+            for (int i = 0; i < abList.size(); i++) {
                 abd.remove(abList.get(i).getCodiceUnivoco());
             }
         }
-        TypedQuery<Biglietto> bigQuery=em.createQuery("SELECT b FROM Biglietto b WHERE b.emittente.id = :idEmittente", Biglietto.class);
-        bigQuery.setParameter("idEmittente",idEmittente);
-        List<Biglietto> bigList=bigQuery.getResultList();
-        if(!bigList.isEmpty()){
-            for(int i=0; i<bigList.size(); i++){
+        TypedQuery<Biglietto> bigQuery = em.createQuery("SELECT b FROM Biglietto b WHERE b.emittente.id = :idEmittente", Biglietto.class);
+        bigQuery.setParameter("idEmittente", idEmittente);
+        List<Biglietto> bigList = bigQuery.getResultList();
+        if (!bigList.isEmpty()) {
+            for (int i = 0; i < bigList.size(); i++) {
                 deleteBiglietto(bigList.get(i).getCodiceUnivoco());
             }
         }
-        try{
+        try {
             venDao.remove(idEmittente);
-        } catch(Exception ex){
+        } catch (Exception ex) {
             System.out.println("id non trovato");
         }
 
@@ -233,37 +231,38 @@ public class Application {
 //                LocalDateTime.of(2025, 10, 5, 7, 15)
 //        );
 //        cDao.save(corsa10);
-        Scanner scanner= new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in);
 
-        String op="";
-        Persona utente=null;
+        String op = "";
+        Persona utente = null;
 
-        while(true){
-            int ch=0;
-            if(utente==null){
-            System.out.println("Login utente");
-            System.out.println("inserire id utente, oppure q per uscire");
-            op=scanner.nextLine();
-            if(op.equals("q")){
-                break;
+        while (true) {
+            int ch = 0;
+            if (utente == null) {
+                System.out.println("Login utente");
+                System.out.println("inserire id utente, oppure q per uscire");
+                op = scanner.nextLine();
+                if (op.equals("q")) {
+                    break;
+                }
+                try {
+                    ch = Integer.getInteger(op);
+                    utente = pd.findById(ch);
+
+                } catch (Exception ex) {
+                    System.out.println("input non valido");
+                }
             }
-            try{
-                ch=Integer.getInteger(op);
-                 utente=pd.findById(ch);
-
-            }catch(Exception ex){
-                System.out.println("input non valido");
-            }}
-            if(utente!=null){
-                op="";
-                if(utente.isAdmin()){
+            if (utente != null) {
+                op = "";
+                if (utente.isAdmin()) {
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
                     System.out.println("Inserire 2 per verificare un abbonamento ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
-                    op= scanner.nextLine();
-                    switch(op){
+                    op = scanner.nextLine();
+                    switch (op) {
                         case "1":
                             System.out.println("-----");
                             break;
@@ -271,26 +270,42 @@ public class Application {
                             System.out.println("-----");
                             break;
                         case "3":
-                            System.out.println("-----");
+                            System.out.print("inserisci id del mezzo: ");
+                            String inputMezzo = scanner.nextLine();
+                            try {
+                                long idMezzo = Long.parseLong(inputMezzo);
+                                List<Manutenzioni> manutenzioni = manDao.getManuPerMezzo(idMezzo);
+
+                                if (manutenzioni.isEmpty()) {
+                                    System.out.println("nessuna manutenzione trovata per questo mezzo");
+                                } else {
+                                    System.out.println("\nmanutenzioni mezzo id " + idMezzo);
+                                    for (Manutenzioni m : manutenzioni) {
+                                        System.out.println(m);
+                                    }
+                                }
+                            } catch (NumberFormatException e) {
+                                System.out.println("id non valido");
+                            }
                             break;
                         case "4":
                             System.out.println("-----");
                             break;
-                        default :
+                        default:
                             System.out.println("input non valido");
                             break;
 
                     }
 
-                } else{
-                    op="";
+                } else {
+                    op = "";
                     System.out.println("Utente");
                     System.out.println("Inserire 1 per nuovo abbonamento ");
                     System.out.println("Inserire 2 per biglietto ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per rinnovare la tessera");
                     System.out.println("Inserire54 per vidimare il biglietto");
-                    switch(op){
+                    switch (op) {
                         case "1":
                             System.out.println("-----");
                             break;
@@ -306,7 +321,7 @@ public class Application {
                         case "5":
                             System.out.println("-----");
                             break;
-                        default :
+                        default:
                             System.out.println("input non valido");
                             break;
 
@@ -316,21 +331,7 @@ public class Application {
             }
 
 
-
-
-            }
-
-
-
-
-
-
-
-
-
-
-
-
+        }
 
 
         scanner.close();

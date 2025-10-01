@@ -145,9 +145,9 @@ public class Application {
     // utente
     //1) metodo nuovo abbonamento passando id venditore FATTO
     //2) metodo nuovo biglietto pasando id venditore FATTO
-    //3) metodo setScadenza su tessera se dataScadenza > oggi
+    //3) metodo setScadenza su tessera se dataScadenza < oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
-    //5) fare la tessera se già non ce l'ha
+    //5) fare la tessera se già non ce l'ha FATTO
     //--------------------------------------------
     //admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO DA PROVARE

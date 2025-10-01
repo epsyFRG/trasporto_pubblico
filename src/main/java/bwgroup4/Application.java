@@ -283,7 +283,7 @@ public class Application {
                                 System.out.println("Errore verifica: " + ex.getMessage());
                             }
                         }
-                            break;
+                        break;
                         case "3":
                             System.out.print("inserisci id del mezzo: ");
                             String inputMezzo = scanner.nextLine();
@@ -317,10 +317,10 @@ public class Application {
                     System.out.println("Utente");
                     System.out.println("Inserire 1 per nuovo abbonamento ");
                     System.out.println("Inserire 2 per biglietto ");
-                    System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
-                    System.out.println("Inserire 4 per rinnovare la tessera");
-                    System.out.println("Inserire 5 per vidimare il biglietto");
-                    switch(op){
+                    ;
+                    System.out.println("Inserire 3 per rinnovare la tessera");
+                    System.out.println("Inserire 4 per vidimare il biglietto");
+                    switch (op) {
                         case "1":
                             System.out.println("-----");
                             break;
@@ -353,9 +353,6 @@ public class Application {
                             System.out.println("-----");
                             break;
                         case "4":
-                            System.out.println("-----");
-                            break;
-                        case "5":
                             System.out.println("-----");
                             break;
                         default:

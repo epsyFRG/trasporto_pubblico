@@ -140,13 +140,13 @@ public class Application {
 
     //1) metodo getIsAdmin in base a id persona
     //-------------------------------------------
-    //utente
+    // utente
     //1) metodo nuovo abbonamento passando id venditore
     //2) metodo nuovo biglietto pasando id venditore
     //3) metodo setScadenza su tessera se dataScadenza > oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
     //---------------------------------
-    //admin
+    // admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
     //2) verifica abbonamento in mase a tessera (già fatto, da mettere nello switch)
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch)

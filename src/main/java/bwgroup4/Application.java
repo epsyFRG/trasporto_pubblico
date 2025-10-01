@@ -328,9 +328,9 @@ public class Application {
                     System.out.println("Utente");
                     System.out.println("Inserire 1 per nuovo abbonamento ");
                     System.out.println("Inserire 2 per biglietto ");
-                    ;
                     System.out.println("Inserire 3 per rinnovare la tessera");
                     System.out.println("Inserire 4 per vidimare il biglietto");
+                    op=scanner.nextLine();
                     switch (op) {
                         case "1":
                             int idEm=0;

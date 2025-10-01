@@ -148,7 +148,7 @@ public class Application {
     //1) metodo nuovo abbonamento passando id venditore FATTO
     //2) metodo nuovo biglietto pasando id venditore FATTO
     //3) metodo setScadenza su tessera se dataScadenza < oggi
-    //4) nuova vidimazione fornendo codice biglietto e id mezzo
+    //4) nuova vidimazione fornendo codice biglietto e id mezzo FATTO
     //5) fare la tessera se già non ce l'ha FATTO
     //--------------------------------------------
     //admin
@@ -295,6 +295,7 @@ public class Application {
                             strIdEm=scanner.nextLine();
                             try{
                                 idEm=Integer.parseInt(strIdEm);
+                                Venditore ven=venDao.findById(idEm);
                             }catch (Exception ex){
                                 System.out.println("input non valido");
                                 break;
@@ -333,13 +334,21 @@ public class Application {
                             }
                             System.out.println("Abbonamenti:");
                             try{
-                            System.out.println(abd.getPerEmitAndPeriodo(mStart,mFinish,anStart,anFinish,idEm));}
+                                List<Abbonamento> abl=abd.getPerEmitAndPeriodo(mStart,mFinish,anStart,anFinish,idEm);
+                                if(abl.isEmpty()){
+                                    throw new RuntimeException();
+                                }
+                            System.out.println(abl);}
                             catch (Exception ex){
                                 System.out.println("non ci sono risultati per gli abbonamenti");
                             }
                             System.out.println("Biglietti:");
                             try{
-                            System.out.println(biglDao.getPerPeriodoAndEmitt(mStart,anStart,mFinish,anFinish,idEm));}
+                                List<Biglietto> bl=biglDao.getPerPeriodoAndEmitt(mStart,anStart,mFinish,anFinish,idEm);
+                                if(bl.isEmpty()){
+                                    throw new RuntimeException();
+                                }
+                            System.out.println(bl);}
                             catch (Exception ex){
                                 System.out.println("non ci sono risultati per i biglietti");
                             }
@@ -627,7 +636,28 @@ public class Application {
                             break;
                         case "4":
                             System.out.println("Vidimazione biglietto");
-
+                            int codBiglietto=0;
+                            long meId=0;
+                            Biglietto big=null;
+                            Mezzi mezzo =null;
+                            System.out.println("inserire il codice del biglietto (numero intero)");
+                            try{
+                                codBiglietto= Integer.parseInt(scanner.nextLine());
+                                big=biglDao.findById(codBiglietto);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("inserire l'id del mezzo (numero intero)");
+                            try{
+                                meId= Long.parseLong(scanner.nextLine());
+                                mezzo=mDao.findById(meId);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            Vidimazioni newVid = new Vidimazioni(mezzo, big);
+                            viDao.save(newVid);
                             break;
                         case "5":
                             try {

@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
@@ -266,7 +267,20 @@ public class Application {
                         case "1":
                             System.out.println("-----");
                             break;
-                        case "2":
+                        case "2": try {
+                            System.out.print("Abbonamento: ");
+                            String codice = scanner.nextLine().trim();
+                            LocalDate oggi = java.time.LocalDate.now();
+                            Long c = em.createQuery(
+                                    "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.tessera.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
+                                     Long.class)
+                                    .setParameter("c", codice)
+                                    .setParameter("oggi", oggi)
+                                    .getSingleResult();
+                            System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");
+                        } catch (Exception ex) {
+                            System.out.println("Errore verifica: " + ex.getMessage());
+                        }
                             System.out.println("-----");
                             break;
                         case "3":

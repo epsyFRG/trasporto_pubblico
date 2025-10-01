@@ -7,6 +7,7 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
@@ -146,7 +147,7 @@ public class Application {
     //2) metodo nuovo biglietto pasando id venditore
     //3) metodo setScadenza su tessera se dataScadenza > oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
-    //---------------------------------
+    //--------------------------------------------
     //admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
     //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch)
@@ -237,6 +238,13 @@ public class Application {
         String op="";
         Persona utente=null;
 
+        Persona p=pd.findById(2);
+        Tessera t= new Tessera(p);
+       // td.save(t);
+        DistAuto d = new DistAuto("llklkj", true);
+        //disDao.save(d);
+
+
         while(true){
             int ch=0;
             if(utente==null){
@@ -247,7 +255,7 @@ public class Application {
                 break;
             }
             try{
-                ch=Integer.getInteger(op);
+                ch=Integer.parseInt(op);
                  utente=pd.findById(ch);
 
             }catch(Exception ex){
@@ -261,6 +269,8 @@ public class Application {
                     System.out.println("Inserire 2 per verificare un abbonamento ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
+                    System.out.println("Inserire q per uscire");
+
                     op= scanner.nextLine();
                     switch(op){
                         case "1":
@@ -278,7 +288,9 @@ public class Application {
                         default :
                             System.out.println("input non valido");
                             break;
-
+                    }
+                    if(op.equals("q")){
+                        break;
                     }
 
                 } else{
@@ -288,10 +300,54 @@ public class Application {
                     System.out.println("Inserire 2 per biglietto ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per rinnovare la tessera");
-                    System.out.println("Inserire54 per vidimare il biglietto");
+                    System.out.println("Inserire 5 per vidimare il biglietto");
+                    System.out.println("Inserire q per uscire");
+                    op=scanner.nextLine();
                     switch(op){
                         case "1":
-                            System.out.println("-----");
+                            int idEm=0;
+                            String mens="";
+                            boolean isMens=true;
+                            Venditore v=null;
+                            Tessera tess=null;
+                            boolean ok=true;
+                            try{
+                                 tess=pd.getTesseraById(utente.getId());
+                            }catch (Exception ex){
+                                System.out.println("non hai la tessera, non puoi fare l'abbonamento");
+                                break;
+                            }
+
+                            try{
+                                Abbonamento a=abd.getAbByTessera(tess);
+                                ok=false;
+                            }catch (Exception ex){
+                                ok=true;
+                            }
+                            if(ok){
+                            System.out.println("Nuovo abbonamento");
+                            System.out.println("inserire l'id dell' emittente ");
+                            try {
+                                idEm = Integer.parseInt(scanner.nextLine());
+                                v = venDao.findById(idEm);
+                            }catch(Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("inserire 1 per abbonamento Mansile");
+                            System.out.println("inserire 2 per abbonamento Settimanale");
+                            mens=scanner.nextLine();
+                            if(mens.equals("1")){
+                                isMens=true;
+                            }else if(mens.equals("2")){
+                                isMens=false;
+                            } else{
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            Abbonamento ab= new Abbonamento(v,tess,isMens);
+                            abd.save(ab);}
+
                             break;
                         case "2":
                             System.out.println("-----");
@@ -305,10 +361,14 @@ public class Application {
                         case "5":
                             System.out.println("-----");
                             break;
+
                         default :
                             System.out.println("input non valido");
                             break;
 
+                    }
+                    if(op.equals("q")){
+                        break;
                     }
 
                 }

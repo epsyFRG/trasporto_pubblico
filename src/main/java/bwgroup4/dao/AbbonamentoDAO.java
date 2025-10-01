@@ -2,6 +2,7 @@ package bwgroup4.dao;
 
 import bwgroup4.entities.Abbonamento;
 import bwgroup4.entities.DistAuto;
+import bwgroup4.entities.Tessera;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
@@ -57,6 +58,12 @@ public class AbbonamentoDAO {
 
         return query.getResultList();
 
+    }
+
+    public Abbonamento getAbByTessera(Tessera tes){
+        TypedQuery<Abbonamento> query = em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.codice = :codice ", Abbonamento.class);
+        query.setParameter("codice", tes.getCodice());
+        return query.getSingleResult();
     }
 
 

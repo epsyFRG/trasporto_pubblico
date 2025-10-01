@@ -5,24 +5,51 @@ import bwgroup4.entities.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
+import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Application {
 
     static EntityManagerFactory emf= Persistence.createEntityManagerFactory("trasportopubblico");
 
+    static EntityManager em=emf.createEntityManager();
+    static CorseDAO cDao = new CorseDAO(em);
+    static MezziDAO mDao = new MezziDAO(em);
+    static TrattaDAO tDao = new TrattaDAO(em);
+    static PersonaDAO pd= new PersonaDAO(em);
+    static  TesseraDAO td= new TesseraDAO(em);
+    static  AbbonamentoDAO abd=new AbbonamentoDAO(em);
+    static  DistAutoDAO disDao= new DistAutoDAO(em);
+    static  BigliettoDAO biglDao= new BigliettoDAO(em);
+    static  VidimazioniDAO viDao= new VidimazioniDAO(em);
+    static  ManutenzioniDAO manDao=new ManutenzioniDAO(em);
 
+    public static void deletePerson(int idPersona){
+        TypedQuery<Tessera> tesQuery= em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
+        tesQuery.setParameter("id",idPersona);
+        List<Tessera> tessList=tesQuery.getResultList();
+        if(!tessList.isEmpty()){
+            Tessera tess=tessList.getFirst();
+            TypedQuery<Abbonamento> abQuery=em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.codice = :codice", Abbonamento.class);
+            abQuery.setParameter("codice", tess.getCodice());
+            List<Abbonamento> abList= abQuery.getResultList();
+            if(!abList.isEmpty()){
+                Abbonamento ab=abList.getFirst();
+                abd.remove(ab.getCodiceUnivoco());
+            }
+            td.remove(tess.getCodice());
+        }
+        pd.remove(idPersona);
+    }
 
 
     public static void main(String[] args) {
 
 
-        EntityManager em=emf.createEntityManager();
-        CorseDAO cDao = new CorseDAO(em);
-        MezziDAO mDao = new MezziDAO(em);
-        TrattaDAO tDao = new TrattaDAO(em);
+
 
 //        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
 //        tDao.save(tratta1);
@@ -103,17 +130,11 @@ public class Application {
 
 
 
-        PersonaDAO pd= new PersonaDAO(em);
-        TesseraDAO td= new TesseraDAO(em);
-        AbbonamentoDAO abd=new AbbonamentoDAO(em);
-        DistAutoDAO disDao= new DistAutoDAO(em);
-        BigliettoDAO biglDao= new BigliettoDAO(em);
-        VidimazioniDAO viDao= new VidimazioniDAO(em);
-        ManutenzioniDAO manDao=new ManutenzioniDAO(em);
+
 
         Persona per1 = new Persona("pippo", "lkjk",false);
         Persona per2 = new Persona("dfgdfg", "lkjk",false);
-        pd.save(per2);
+        //pd.save(per2);
         Persona perFromDb= pd.findById(1);
         Tessera tes2 = new Tessera(perFromDb);
         //td.save(tes1);
@@ -123,7 +144,8 @@ public class Application {
         DistAuto distFromDb = disDao.findById(152);
 
         Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
-        //abd.save(ab1);
+        //
+        // abd.save(ab1);
 
         Biglietto bigl1= new Biglietto(distFromDb);
         //biglDao.save(bigl1);
@@ -155,11 +177,6 @@ public class Application {
                 LocalDateTime.of(2025, 10, 1, 10, 25)
         );
         //cDao.save(corsa2);
-
-        System.out.println(biglDao.getPerPeriodoAndEmitt(3000, 2025,10,2025,152));
-
-
-
 
 
 

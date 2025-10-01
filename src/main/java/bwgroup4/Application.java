@@ -9,6 +9,7 @@ import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Scanner;
 
 public class Application {
 
@@ -148,7 +149,7 @@ public class Application {
     //---------------------------------
     //admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
-    //2) verifica abbonamento in mase a tessera (già fatto, da mettere nello switch)
+    //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch)
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch)
     //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch)
 
@@ -231,6 +232,92 @@ public class Application {
 //                LocalDateTime.of(2025, 10, 5, 7, 15)
 //        );
 //        cDao.save(corsa10);
+        Scanner scanner= new Scanner(System.in);
+
+        String op="";
+        Persona utente=null;
+
+        while(true){
+            int ch=0;
+            if(utente==null){
+            System.out.println("Login utente");
+            System.out.println("inserire id utente, oppure q per uscire");
+            op=scanner.nextLine();
+            if(op.equals("q")){
+                break;
+            }
+            try{
+                ch=Integer.getInteger(op);
+                 utente=pd.findById(ch);
+
+            }catch(Exception ex){
+                System.out.println("input non valido");
+            }}
+            if(utente!=null){
+                op="";
+                if(utente.isAdmin()){
+                    System.out.println("Amministratore");
+                    System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
+                    System.out.println("Inserire 2 per verificare un abbonamento ");
+                    System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
+                    System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
+                    op= scanner.nextLine();
+                    switch(op){
+                        case "1":
+                            System.out.println("-----");
+                            break;
+                        case "2":
+                            System.out.println("-----");
+                            break;
+                        case "3":
+                            System.out.println("-----");
+                            break;
+                        case "4":
+                            System.out.println("-----");
+                            break;
+                        default :
+                            System.out.println("input non valido");
+                            break;
+
+                    }
+
+                } else{
+                    op="";
+                    System.out.println("Utente");
+                    System.out.println("Inserire 1 per nuovo abbonamento ");
+                    System.out.println("Inserire 2 per biglietto ");
+                    System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
+                    System.out.println("Inserire 4 per rinnovare la tessera");
+                    System.out.println("Inserire54 per vidimare il biglietto");
+                    switch(op){
+                        case "1":
+                            System.out.println("-----");
+                            break;
+                        case "2":
+                            System.out.println("-----");
+                            break;
+                        case "3":
+                            System.out.println("-----");
+                            break;
+                        case "4":
+                            System.out.println("-----");
+                            break;
+                        case "5":
+                            System.out.println("-----");
+                            break;
+                        default :
+                            System.out.println("input non valido");
+                            break;
+
+                    }
+
+                }
+            }
+
+
+
+
+            }
 
 
 
@@ -244,6 +331,8 @@ public class Application {
 
 
 
+
+        scanner.close();
         em.close();
         emf.close();
 

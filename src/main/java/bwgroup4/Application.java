@@ -9,7 +9,9 @@ import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Application {
@@ -153,7 +155,7 @@ public class Application {
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO DA PROVARE
     //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
-    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch)
+    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO DA PROVARE
     //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO DA PROVARE
     //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO DA PROVARE
 
@@ -268,6 +270,7 @@ public class Application {
             }}
             if(utente!=null){
                 op="";
+                //Lato admin
                 if(utente.isAdmin()){
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
@@ -376,7 +379,77 @@ public class Application {
                             }
                             break;
                         case "4":
-                            System.out.println("-----");
+                            int aStart=0, aFinish=0, meStart=0, meFinish=0;
+                            System.out.println("Ricerca vidimazioni");
+                            System.out.println("data inizio ricerca");
+                            System.out.println("inserire l'anno (intero)");
+                            try{
+                                aStart= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data inizio ricerca");
+                            System.out.println("inserire il mese (intero da 1 a 12)");
+                            try{
+                                meStart= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data fine ricerca");
+                            System.out.println("inserire l'anno (intero)");
+                            try{
+                                aFinish= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("data fine ricerca");
+                            System.out.println("inserire il mese (intero da 1 a 12)");
+                            try{
+                                meFinish= Integer.parseInt(scanner.nextLine());
+                            } catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            List<Vidimazioni> vidiList=null;
+                            try {
+                                 vidiList=viDao.getVidsPerPeriodo(meStart, aStart, meFinish, aFinish);
+                                System.out.println(vidiList);
+                            }catch (Exception ex){
+                                System.out.println("non ci sono vidimazioni per i criteri isìnseriti");
+                                break;
+                            }
+                            String yN="";
+                            System.out.println("vuoi restringere la ricerca alle vidimazioni di un singolo mezzo? ( y / n )");
+                            System.out.println("y = si");
+                            System.out.println("n = no");
+                            yN=scanner.nextLine();
+                            if(!yN.equals("y")){
+                                break;
+                            }
+                            long idMezz=0;
+                            Mezzi mezz=null;
+                            System.out.println("inserire l'id del mezzo");
+                            try{
+                                idMezz= Long.parseLong(scanner.nextLine());
+                                mezz=mDao.findById(idMezz);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            ArrayList<Vidimazioni> vidMezList=new ArrayList<Vidimazioni>();
+                            for (int i=0; i<vidiList.size(); i++){
+                                if(Objects.equals(vidiList.get(i).getMezzo().getId(), mezz.getId())){
+                                    vidMezList.add(vidiList.get(i));
+                                }
+                            }
+                            if(!vidMezList.isEmpty()){
+                                System.out.println(vidMezList);
+                            } else{
+                                System.out.println("non ci sono vidimazioni per il mezzo inserito");
+                            }
                             break;
                         case "5":
                             long idTratta=0;
@@ -440,7 +513,7 @@ public class Application {
                             }
                             LocalDateTime now=LocalDateTime.now();
                             LocalDateTime after = now.plusMinutes(durata);
-                            Corse cor=new Corse(m,tratta,now, after);
+                            Corse cor=new Corse(m,tratta,now,after);
                             cDao.save(cor);
                             break;
 
@@ -453,7 +526,9 @@ public class Application {
                         break;
                     }
 
-                } else {
+                }
+                //Lato utente
+                else {
                     op = "";
                     System.out.println("Utente");
                     System.out.println("Inserire 1 per nuovo abbonamento ");

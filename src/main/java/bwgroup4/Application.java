@@ -25,6 +25,7 @@ public class Application {
     static BigliettoDAO biglDao = new BigliettoDAO(em);
     static VidimazioniDAO viDao = new VidimazioniDAO(em);
     static ManutenzioniDAO manDao = new ManutenzioniDAO(em);
+    static VenditoreDAO venDao = new VenditoreDAO(em);
 
     public static void deletePerson(int idPersona) {
         TypedQuery<Tessera> tesQuery = em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
@@ -41,7 +42,11 @@ public class Application {
             }
             td.remove(tess.getCodice());
         }
-        pd.remove(idPersona);
+        try {
+            pd.remove(idPersona);
+        } catch (Exception ex){
+            System.out.println("id non trovato");
+        }
     }
 
     public static void deleteMezzo(long idMezzo){
@@ -69,10 +74,12 @@ public class Application {
                 viDao.delete(vidList.get(i).getBiglietto());
             }
         }
-        mDao.delete(idMezzo);
+        try {
+            mDao.delete(idMezzo);
+        }catch (Exception ex){
+            System.out.println("id non trovato");
+        }
     }
-
-  
 
     public static void deleteTratta(int idTratta) {
         TypedQuery<Corse> corseQuery = em.createQuery("SELECT c FROM Corse c WHERE c.tratta.id = :id", Corse.class);
@@ -83,7 +90,54 @@ public class Application {
                 cDao.remove(corsa.getId().intValue());
             }
         }
-        tDao.delete(idTratta);
+        try {
+            tDao.delete(idTratta);
+        }catch (Exception ex){
+            System.out.println("id non trovato");
+        }
+    }
+
+    public static void deleteBiglietto(int codice){
+        TypedQuery <Vidimazioni> vidQuery=em.createQuery("SELECT v FROM Vidimazioni v WHERE v.biglietto.codiceUnivoco = :codice", Vidimazioni.class);
+        vidQuery.setParameter("codice", codice);
+        List<Vidimazioni> vidList = vidQuery.getResultList();
+        if(!vidList.isEmpty()){
+            Vidimazioni v=vidList.getFirst();
+            viDao.delete(v.getBiglietto());
+        }
+        try{
+           biglDao.remove(codice);
+        } catch (Exception ex){
+            System.out.println("codice non trovato");
+        }
+
+    }
+
+    public static void deleteEmittente(int idEmittente){
+        TypedQuery<Abbonamento> abQuery=em.createQuery("SELECT a FROM Abbonamento a WHERE a.emittente.id = :idEmittente", Abbonamento.class);
+        abQuery.setParameter("idEmittente", idEmittente);
+        List<Abbonamento> abList=abQuery.getResultList();
+        if(!abList.isEmpty()){
+            for(int i=0; i<abList.size(); i++){
+                abd.remove(abList.get(i).getCodiceUnivoco());
+            }
+        }
+
+        TypedQuery<Biglietto> bigQuery=em.createQuery("SELECT b FROM Biglietto b WHERE b.emittente.id = :idEmittente", Biglietto.class);
+        List<Biglietto> bigList=bigQuery.getResultList();
+        if(!bigList.isEmpty()){
+            for(int i=0; i<bigList.size(); i++){
+                deleteBiglietto(bigList.get(i).getCodiceUnivoco());
+            }
+        }
+
+        try{
+            venDao.remove(idEmittente);
+
+        } catch(Exception ex){
+            System.out.println("id non trovato");
+        }
+
     }
 
 

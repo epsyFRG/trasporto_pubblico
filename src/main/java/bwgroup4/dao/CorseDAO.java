@@ -22,6 +22,7 @@ public class CorseDAO {
         tr.begin();
         em.persist(c);
         tr.commit();
+        System.out.println("corsa salvata");
     }
     public Corse findById(long id){
         Corse found = em.find(Corse.class, id);

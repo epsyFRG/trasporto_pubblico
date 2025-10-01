@@ -155,6 +155,7 @@ public class Application {
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
     //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch)
     //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO DA PROVARE
+    //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO DA PROVARE
 
     public static void main(String[] args) {
 
@@ -235,6 +236,8 @@ public class Application {
 //                LocalDateTime.of(2025, 10, 5, 7, 15)
 //        );
 //        cDao.save(corsa10);
+
+
         Scanner scanner = new Scanner(System.in);
         LocalDate today=LocalDate.now();
 
@@ -272,6 +275,7 @@ public class Application {
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
                     System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
+                    System.out.println("Inserire 6 per assegnare un mezzo ad una tratta (nuova corsa) ");
                     System.out.println("Inserire q per uscire");
 
                     op= scanner.nextLine();
@@ -401,6 +405,45 @@ public class Application {
                                 System.out.println("non ci sono risultati per i parametri inseriti");
                             }
                             break;
+                        case "6":
+                            Mezzi m=null;
+                            Tratta tratta=null;
+                            long trId=0, idM=0;
+
+                            System.out.println("Nuova corsa");
+                            System.out.println("inserire l'id della tratta");
+                            try{
+                                trId= Long.parseLong(scanner.nextLine());
+                                tratta=tDao.findById(trId);
+                            }catch(Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("inserire l'id del mezzo da assegnare");
+                            try{
+                                idM= Long.parseLong(scanner.nextLine());
+                                m=mDao.findById(idM);
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            long durata=0;
+                            System.out.println("inserire la durata in minuti (intero maggiore di 0)");
+                            try {
+                                durata= Long.parseLong(scanner.nextLine());
+                                if(durata <=0){
+                                    throw new RuntimeException();
+                                }
+                            }catch (Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            LocalDateTime now=LocalDateTime.now();
+                            LocalDateTime after = now.plusMinutes(durata);
+                            Corse cor=new Corse(m,tratta,now, after);
+                            cDao.save(cor);
+                            break;
+
                         case "q": break;
                         default:
                             System.out.println("input non valido");

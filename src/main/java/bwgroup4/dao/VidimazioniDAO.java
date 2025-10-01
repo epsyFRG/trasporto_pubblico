@@ -46,6 +46,16 @@ public class VidimazioniDAO {
         return found;
     }
 
+    public Vidimazioni findById(int idBiglietto){
+        // Vidimazioni found = em.find(Vidimazioni.class, biglietto);
+        Vidimazioni found=null;
+        TypedQuery<Vidimazioni> query = em.createQuery("SELECT v FROM Vidimazioni v WHERE v.biglietto.codiceUnivoco = :id", Vidimazioni.class);
+        query.setParameter("id", idBiglietto );
+        found=query.getSingleResult();
+        if (found == null) throw new NotFoundException(idBiglietto);
+        return found;
+    }
+
     public void delete(Biglietto biglietto) {
         Vidimazioni found = this.findByBiglietto(biglietto);
         em.getTransaction().begin();

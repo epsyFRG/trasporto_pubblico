@@ -124,6 +124,7 @@ public class Application {
         }
 
         TypedQuery<Biglietto> bigQuery=em.createQuery("SELECT b FROM Biglietto b WHERE b.emittente.id = :idEmittente", Biglietto.class);
+        bigQuery.setParameter("idEmittente",idEmittente);
         List<Biglietto> bigList=bigQuery.getResultList();
         if(!bigList.isEmpty()){
             for(int i=0; i<bigList.size(); i++){
@@ -133,7 +134,6 @@ public class Application {
 
         try{
             venDao.remove(idEmittente);
-
         } catch(Exception ex){
             System.out.println("id non trovato");
         }
@@ -220,6 +220,11 @@ public class Application {
 //                LocalDateTime.of(2025, 10, 5, 7, 15)
 //        );
 //        cDao.save(corsa10);
+
+
+        
+
+
 
 
 

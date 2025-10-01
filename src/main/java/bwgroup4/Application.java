@@ -267,21 +267,22 @@ public class Application {
                         case "1":
                             System.out.println("-----");
                             break;
-                        case "2": try {
-                            System.out.print("Abbonamento: ");
-                            String codice = scanner.nextLine().trim();
-                            LocalDate oggi = java.time.LocalDate.now();
-                            Long c = em.createQuery(
-                                    "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.tessera.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
-                                     Long.class)
-                                    .setParameter("c", codice)
-                                    .setParameter("oggi", oggi)
-                                    .getSingleResult();
-                            System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");
-                        } catch (Exception ex) {
-                            System.out.println("Errore verifica: " + ex.getMessage());
+                        case "2": {
+                            try {
+                                System.out.print("Abbonamento: ");
+                                String codice = scanner.nextLine().trim();
+                                LocalDate oggi = java.time.LocalDate.now();
+                                Long c = em.createQuery(
+                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.tessera.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
+                                                Long.class)
+                                        .setParameter("c", codice)
+                                        .setParameter("oggi", oggi)
+                                        .getSingleResult();
+                                System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");
+                            } catch (Exception ex) {
+                                System.out.println("Errore verifica: " + ex.getMessage());
+                            }
                         }
-                            System.out.println("-----");
                             break;
                         case "3":
                             System.out.println("-----");
@@ -302,14 +303,36 @@ public class Application {
                     System.out.println("Inserire 2 per biglietto ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per rinnovare la tessera");
-                    System.out.println("Inserire54 per vidimare il biglietto");
+                    System.out.println("Inserire 5 per vidimare il biglietto");
                     switch(op){
                         case "1":
                             System.out.println("-----");
                             break;
-                        case "2":
-                            System.out.println("-----");
+                        case "2": {
+                            System.out.print("ID venditore : ");
+                            try {
+                                int idVend = Integer.parseInt(scanner.nextLine().trim());
+                                Venditore vend = em.find(Venditore.class, idVend);
+                                if (vend == null) {
+                                    System.out.println("Venditore non trovato.");
+                                    break;
+                                }
+                                Biglietto b = new Biglietto(vend);
+
+                                em.getTransaction().begin();
+                                em.persist(b);
+                                em.getTransaction().commit();
+
+                                System.out.println("Biglietto emesso: " + b.getCodiceUnivoco());
+                            } catch (Exception ex) {
+                                try {
+                                    if (em.getTransaction().isActive()) em.getTransaction().rollback();
+                                } catch (Exception ignore) {
+                                }
+                                System.out.println("Errore emissione biglietto: " + ex.getMessage());
+                            }
                             break;
+                        }
                         case "3":
                             System.out.println("-----");
                             break;

@@ -7,37 +7,36 @@ import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
 public class Application {
 
-    static EntityManagerFactory emf= Persistence.createEntityManagerFactory("trasportopubblico");
+    static EntityManagerFactory emf = Persistence.createEntityManagerFactory("trasportopubblico");
 
-    static EntityManager em=emf.createEntityManager();
+    static EntityManager em = emf.createEntityManager();
     static CorseDAO cDao = new CorseDAO(em);
     static MezziDAO mDao = new MezziDAO(em);
     static TrattaDAO tDao = new TrattaDAO(em);
-    static PersonaDAO pd= new PersonaDAO(em);
-    static  TesseraDAO td= new TesseraDAO(em);
-    static  AbbonamentoDAO abd=new AbbonamentoDAO(em);
-    static  DistAutoDAO disDao= new DistAutoDAO(em);
-    static  BigliettoDAO biglDao= new BigliettoDAO(em);
-    static  VidimazioniDAO viDao= new VidimazioniDAO(em);
-    static  ManutenzioniDAO manDao=new ManutenzioniDAO(em);
+    static PersonaDAO pd = new PersonaDAO(em);
+    static TesseraDAO td = new TesseraDAO(em);
+    static AbbonamentoDAO abd = new AbbonamentoDAO(em);
+    static DistAutoDAO disDao = new DistAutoDAO(em);
+    static BigliettoDAO biglDao = new BigliettoDAO(em);
+    static VidimazioniDAO viDao = new VidimazioniDAO(em);
+    static ManutenzioniDAO manDao = new ManutenzioniDAO(em);
 
-    public static void deletePerson(int idPersona){
-        TypedQuery<Tessera> tesQuery= em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
-        tesQuery.setParameter("id",idPersona);
-        List<Tessera> tessList=tesQuery.getResultList();
-        if(!tessList.isEmpty()){
-            Tessera tess=tessList.getFirst();
-            TypedQuery<Abbonamento> abQuery=em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.codice = :codice", Abbonamento.class);
+    public static void deletePerson(int idPersona) {
+        TypedQuery<Tessera> tesQuery = em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
+        tesQuery.setParameter("id", idPersona);
+        List<Tessera> tessList = tesQuery.getResultList();
+        if (!tessList.isEmpty()) {
+            Tessera tess = tessList.getFirst();
+            TypedQuery<Abbonamento> abQuery = em.createQuery("SELECT a FROM Abbonamento a WHERE a.tessera.codice = :codice", Abbonamento.class);
             abQuery.setParameter("codice", tess.getCodice());
-            List<Abbonamento> abList= abQuery.getResultList();
-            if(!abList.isEmpty()){
-                Abbonamento ab=abList.getFirst();
+            List<Abbonamento> abList = abQuery.getResultList();
+            if (!abList.isEmpty()) {
+                Abbonamento ab = abList.getFirst();
                 abd.remove(ab.getCodiceUnivoco());
             }
             td.remove(tess.getCodice());
@@ -75,10 +74,20 @@ public class Application {
 
   
 
+    public static void deleteTratta(int idTratta) {
+        TypedQuery<Corse> corseQuery = em.createQuery("SELECT c FROM Corse c WHERE c.tratta.id = :id", Corse.class);
+        corseQuery.setParameter("id", idTratta);
+        List<Corse> corseList = corseQuery.getResultList();
+        if (!corseList.isEmpty()) {
+            for (Corse corsa : corseList) {
+                cDao.remove(corsa.getId().intValue());
+            }
+        }
+        tDao.delete(idTratta);
+    }
+
 
     public static void main(String[] args) {
-
-
 
 
 //        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);

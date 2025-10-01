@@ -8,6 +8,7 @@ import jakarta.persistence.Persistence;
 import jakarta.persistence.TypedQuery;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Scanner;
 
@@ -146,8 +147,8 @@ public class Application {
     //2) metodo nuovo biglietto pasando id venditore
     //3) metodo setScadenza su tessera se dataScadenza > oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
-    //---------------------------------
-    // admin
+    //--------------------------------------------
+    //admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch)
     //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch)
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch)
@@ -237,33 +238,41 @@ public class Application {
         String op = "";
         Persona utente = null;
 
-        while (true) {
-            int ch = 0;
-            if (utente == null) {
-                System.out.println("Login utente");
-                System.out.println("inserire id utente, oppure q per uscire");
-                op = scanner.nextLine();
-                if (op.equals("q")) {
-                    break;
-                }
-                try {
-                    ch = Integer.parseInt(op);
-                    utente = pd.findById(ch);
+        Persona p=pd.findById(2);
+        Tessera t= new Tessera(p);
+       // td.save(t);
+        DistAuto d = new DistAuto("llklkj", true);
+        //disDao.save(d);
 
-                } catch (Exception ex) {
-                    System.out.println("input non valido");
-                }
+
+        while(true){
+            int ch=0;
+            if(utente==null){
+            System.out.println("Login utente");
+            System.out.println("inserire id utente, oppure q per uscire");
+            op=scanner.nextLine();
+            if(op.equals("q")){
+                break;
             }
-            if (utente != null) {
-                op = "";
-                if (utente.isAdmin()) {
+            try{
+                ch=Integer.parseInt(op);
+                 utente=pd.findById(ch);
+
+            }catch(Exception ex){
+                System.out.println("input non valido");
+            }}
+            if(utente!=null){
+                op="";
+                if(utente.isAdmin()){
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
                     System.out.println("Inserire 2 per verificare un abbonamento ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
-                    op = scanner.nextLine();
-                    switch (op) {
+                    System.out.println("Inserire q per uscire");
+
+                    op= scanner.nextLine();
+                    switch(op){
                         case "1":
                             System.out.println("-----");
                             break;
@@ -273,7 +282,7 @@ public class Application {
                                 String codice = scanner.nextLine().trim();
                                 LocalDate oggi = java.time.LocalDate.now();
                                 Long c = em.createQuery(
-                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.tessera.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
+                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.abbonamento.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
                                                 Long.class)
                                         .setParameter("c", codice)
                                         .setParameter("oggi", oggi)
@@ -309,7 +318,9 @@ public class Application {
                         default:
                             System.out.println("input non valido");
                             break;
-
+                    }
+                    if(op.equals("q")){
+                        break;
                     }
 
                 } else {
@@ -322,7 +333,49 @@ public class Application {
                     System.out.println("Inserire 4 per vidimare il biglietto");
                     switch (op) {
                         case "1":
-                            System.out.println("-----");
+                            int idEm=0;
+                            String mens="";
+                            boolean isMens=true;
+                            Venditore v=null;
+                            Tessera tess=null;
+                            boolean ok=true;
+                            try{
+                                 tess=pd.getTesseraById(utente.getId());
+                            }catch (Exception ex){
+                                System.out.println("non hai la tessera, non puoi fare l'abbonamento");
+                                break;
+                            }
+
+                            try{
+                                Abbonamento a=abd.getAbByTessera(tess);
+                                ok=false;
+                            }catch (Exception ex){
+                                ok=true;
+                            }
+                            if(ok){
+                            System.out.println("Nuovo abbonamento");
+                            System.out.println("inserire l'id dell' emittente ");
+                            try {
+                                idEm = Integer.parseInt(scanner.nextLine());
+                                v = venDao.findById(idEm);
+                            }catch(Exception ex){
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            System.out.println("inserire 1 per abbonamento Mansile");
+                            System.out.println("inserire 2 per abbonamento Settimanale");
+                            mens=scanner.nextLine();
+                            if(mens.equals("1")){
+                                isMens=true;
+                            }else if(mens.equals("2")){
+                                isMens=false;
+                            } else{
+                                System.out.println("input non valido");
+                                break;
+                            }
+                            Abbonamento ab= new Abbonamento(v,tess,isMens);
+                            abd.save(ab);}
+
                             break;
                         case "2": {
                             System.out.print("ID venditore : ");
@@ -391,6 +444,9 @@ public class Application {
                             System.out.println("input non valido");
                             break;
 
+                    }
+                    if(op.equals("q")){
+                        break;
                     }
 
                 }

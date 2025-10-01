@@ -1,9 +1,11 @@
 package bwgroup4.dao;
 
 import bwgroup4.entities.Persona;
+import bwgroup4.entities.Tessera;
 import exceptions.NotFoundException;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityTransaction;
+import jakarta.persistence.TypedQuery;
 
 public class PersonaDAO {
     private EntityManager em;
@@ -29,5 +31,11 @@ public class PersonaDAO {
         em.getTransaction().begin();
         em.remove(found);
         em.getTransaction().commit();
+    }
+
+    public Tessera getTesseraById(int id){
+        TypedQuery<Tessera> query=em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
+        query.setParameter("id", id);
+        return query.getSingleResult();
     }
 }

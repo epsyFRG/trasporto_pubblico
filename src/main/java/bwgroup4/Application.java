@@ -73,6 +73,8 @@ public class Application {
         mDao.delete(idMezzo);
     }
 
+  
+
 
     public static void main(String[] args) {
 
@@ -155,59 +157,6 @@ public class Application {
 //                LocalDateTime.of(2025, 10, 5, 7, 15)
 //        );
 //        cDao.save(corsa10);
-
-
-
-
-
-        Persona per1 = new Persona("pippo", "lkjk",false);
-        Persona per2 = new Persona("dfgdfg", "lkjk",false);
-        //pd.save(per2);
-        //Persona perFromDb= pd.findById(1);
-        //Tessera tes2 = new Tessera(perFromDb);
-        //td.save(tes1);
-        //Tessera tesFromDb=td.findById(2);
-        DistAuto dist1= new DistAuto("ditributore1",true);
-        //disDao.save(dist1);
-        DistAuto distFromDb = disDao.findById(152);
-
-        //Abbonamento ab1= new Abbonamento(distFromDb, tesFromDb,true);
-        //
-        // abd.save(ab1);
-
-        Biglietto bigl1= new Biglietto(distFromDb);
-        //biglDao.save(bigl1);
-        Biglietto biglFromDb=biglDao.findById(1);
-
-        Mezzi mezzo1 = new Mezzi("CIAO", TipoMezzi.AUTOBUS, 30);
-       // mDao.save(mezzo1);
-        Mezzi mezFromDb=mDao.findById(1);
-
-        Vidimazioni v1= new Vidimazioni(mezFromDb,biglFromDb);
-        //viDao.save(v1);
-
-        Manutenzioni man1 = new Manutenzioni("cambio olio", LocalDateTime.of(2025, 2,1, 0,0), LocalDateTime.of(2025, 3, 1, 0,0), mezFromDb);
-        //manDao.save(man1);
-
-        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
-        //tDao.save(tratta1);
-        Tratta trFromDb=tDao.findById(1);
-
-        Corse corsa1 = new Corse( mezFromDb, trFromDb,
-                LocalDateTime.of(2025, 10, 1, 8, 30),
-                LocalDateTime.of(2025, 10, 1, 9, 15)
-        );
-       // cDao.save(corsa1);
-        Corse corsa2 = new Corse(
-                mezFromDb,
-                trFromDb,
-                LocalDateTime.of(2025, 10, 1, 10, 0),
-                LocalDateTime.of(2025, 10, 1, 10, 25)
-        );
-        //cDao.save(corsa2);
-
-
-       
 
 
 

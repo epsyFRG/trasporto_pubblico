@@ -164,8 +164,7 @@ public class Application {
         Scanner scanner = new Scanner(System.in);
         LocalDate today=LocalDate.now();
 
-        String op = "";
-        Persona utente = null;
+
 
         Persona p=pd.findById(2);
         Tessera t= new Tessera(p);
@@ -175,7 +174,10 @@ public class Application {
         Persona admin=new Persona("amministratore","lkjlk",true);
         //pd.save(admin);
 
-
+        //--------------------------------------------------------------------------------------------------
+        
+        String op = "";
+        Persona utente = null;
         while(true){
             int ch=0;
             if(utente==null){

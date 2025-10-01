@@ -147,6 +147,7 @@ public class Application {
     //2) metodo nuovo biglietto pasando id venditore FATTO
     //3) metodo setScadenza su tessera se dataScadenza > oggi
     //4) nuova vidimazione fornendo codice biglietto e id mezzo
+    //5) fare la tessera se già non ce l'ha
     //--------------------------------------------
     //admin
     //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO DA PROVARE
@@ -258,7 +259,6 @@ public class Application {
             try{
                 ch=Integer.parseInt(op);
                  utente=pd.findById(ch);
-
             }catch(Exception ex){
                 System.out.println("input non valido");
             }}

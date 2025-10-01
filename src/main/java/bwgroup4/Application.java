@@ -354,29 +354,40 @@ public class Application {
                             }
                             if(ok){
                             System.out.println("Nuovo abbonamento");
-                            System.out.println("inserire l'id dell' emittente ");
+                            System.out.print("Inserisci l'id del venditore: ");
+                            int idVenditore;
+                            Venditore venditore;
                             try {
-                                idEm = Integer.parseInt(scanner.nextLine());
-                                v = venDao.findById(idEm);
-                            }catch(Exception ex){
-                                System.out.println("input non valido");
+                                idVenditore = Integer.parseInt(scanner.nextLine().trim());
+                                venditore = venDao.findById(idVenditore);
+                                if (venditore == null) {
+                                    System.out.println("Venditore non trovato.");
+                                    break;
+                                }
+                            } catch (Exception ex) {
+                                System.out.println("Input non valido per l'id venditore");
                                 break;
                             }
-                            System.out.println("inserire 1 per abbonamento Mansile");
-                            System.out.println("inserire 2 per abbonamento Settimanale");
-                            mens=scanner.nextLine();
-                            if(mens.equals("1")){
-                                isMens=true;
-                            }else if(mens.equals("2")){
-                                isMens=false;
-                            } else{
-                                System.out.println("input non valido");
+                            System.out.print("Abbonamento mensile (1) o settimanale (2)? ");
+                            String tipo = scanner.nextLine().trim();
+                            boolean mensile;
+                            if (tipo.equals("1")) {
+                                mensile = true;
+                            } else if (tipo.equals("2")) {
+                                mensile = false;
+                            } else {
+                                System.out.println("Input non valido per il tipo di abbonamento");
                                 break;
                             }
-                            Abbonamento ab= new Abbonamento(v,tess,isMens);
-                            abd.save(ab);}
-
+                            try {
+                                Abbonamento abbonamento = new Abbonamento(venditore, tess, mensile);
+                                abd.save(abbonamento);
+                                System.out.println("Abbonamento creato con successo!");
+                            } catch (Exception ex) {
+                                System.out.println("Errore nella creazione dell'abbonamento: " + ex.getMessage());
+                            }
                             break;
+                        }
                         case "2": {
                             System.out.print("ID venditore : ");
                             try {
@@ -437,9 +448,39 @@ public class Application {
                                 System.out.println("errore nel rinnovo tessera: " + ex.getMessage());
                             }
                             break;
-                        case "4":
-                            System.out.println("-----");
+                        case "4": {
+                            // Nuova vidimazione fornendo codice biglietto e id mezzo
+                            try {
+                                System.out.print("Inserisci il codice del biglietto: ");
+                                int codiceBiglietto = Integer.parseInt(scanner.nextLine().trim());
+                                Biglietto biglietto = biglDao.findById(codiceBiglietto);
+                                if (biglietto == null) {
+                                    System.out.println("Biglietto non trovato.");
+                                    break;
+                                }
+                                // Controllo se già vidimato
+                                try {
+                                    viDao.findByBiglietto(biglietto);
+                                    System.out.println("Biglietto già vidimato!");
+                                    break;
+                                } catch (Exception ex) {
+                                    // Se non trovato, si può procedere
+                                }
+                                System.out.print("Inserisci l'id del mezzo: ");
+                                long idMezzo = Long.parseLong(scanner.nextLine().trim());
+                                Mezzi mezzo = mDao.findById((int) idMezzo);
+                                if (mezzo == null) {
+                                    System.out.println("Mezzo non trovato.");
+                                    break;
+                                }
+                                Vidimazioni vid = new Vidimazioni(mezzo, biglietto);
+                                viDao.save(vid);
+                                System.out.println("Vidimazione effettuata con successo!");
+                            } catch (Exception ex) {
+                                System.out.println("Errore durante la vidimazione: " + ex.getMessage());
+                            }
                             break;
+                        }
                         default:
                             System.out.println("input non valido");
                             break;

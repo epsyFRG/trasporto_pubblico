@@ -273,7 +273,7 @@ public class Application {
                                 String codice = scanner.nextLine().trim();
                                 LocalDate oggi = java.time.LocalDate.now();
                                 Long c = em.createQuery(
-                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.tessera.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
+                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.abbonamento.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
                                                 Long.class)
                                         .setParameter("c", codice)
                                         .setParameter("oggi", oggi)

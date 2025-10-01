@@ -247,7 +247,7 @@ public class Application {
                     break;
                 }
                 try {
-                    ch = Integer.getInteger(op);
+                    ch = Integer.parseInt(op);
                     utente = pd.findById(ch);
 
                 } catch (Exception ex) {
@@ -350,7 +350,39 @@ public class Application {
                             break;
                         }
                         case "3":
-                            System.out.println("-----");
+                            try {
+                                TypedQuery<Tessera> tesQuery = em.createQuery(
+                                        "SELECT t FROM Tessera t WHERE t.utente.id = :id",
+                                        Tessera.class
+                                );
+                                tesQuery.setParameter("id", utente.getId());
+                                List<Tessera> tessere = tesQuery.getResultList();
+
+                                if (tessere.isEmpty()) {
+                                    System.out.println("nessuna tessera trovata per questo utente");
+                                } else {
+                                    Tessera tessera = tessere.get(0);
+                                    LocalDate oggi = LocalDate.now();
+                                    LocalDate scadenza = tessera.getDataScadenza();
+
+                                    if (scadenza.isBefore(oggi)) {
+                                        tessera.setDataScadenza(oggi.plusYears(1));
+
+                                        em.getTransaction().begin();
+                                        em.merge(tessera);
+                                        em.getTransaction().commit();
+
+                                        System.out.println("tessera rinnovata, uova scadenza: " + tessera.getDataScadenza());
+                                    } else {
+                                        System.out.println("la tessera è ancora valida fino al " + scadenza);
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                if (em.getTransaction().isActive()) {
+                                    em.getTransaction().rollback();
+                                }
+                                System.out.println("errore nel rinnovo tessera: " + ex.getMessage());
+                            }
                             break;
                         case "4":
                             System.out.println("-----");

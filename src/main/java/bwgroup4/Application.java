@@ -152,12 +152,12 @@ public class Application {
     //5) fare la tessera se già non ce l'ha FATTO
     //--------------------------------------------
     //admin
-    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO DA PROVARE
+    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO
     //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
     //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
     //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO DA PROVARE
-    //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO DA PROVARE
-    //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO DA PROVARE
+    //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO
+    //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO
 
     public static void main(String[] args) {
 
@@ -251,6 +251,8 @@ public class Application {
        // td.save(t);
         DistAuto d = new DistAuto("llklkj", true);
         //disDao.save(d);
+        Persona admin=new Persona("amministratore","lkjlk",true);
+        //pd.save(admin);
 
 
         while(true){
@@ -473,6 +475,9 @@ public class Application {
                             }
                             try {
                                 System.out.println("media in secondi della durata di percorrenza:");
+                                if(cDao.findAvgByMezzo(idMez,idTratta)==null){
+                                    throw new RuntimeException();
+                                }
                                 System.out.println(cDao.findAvgByMezzo(idMez,idTratta));
                             }catch (Exception ex){
                                 System.out.println("non ci sono risultati per i parametri inseriti");
@@ -621,7 +626,8 @@ public class Application {
                             System.out.println("-----");
                             break;
                         case "4":
-                            System.out.println("-----");
+                            System.out.println("Vidimazione biglietto");
+
                             break;
                         case "5":
                             try {

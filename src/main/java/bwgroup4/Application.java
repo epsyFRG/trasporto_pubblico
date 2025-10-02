@@ -327,13 +327,51 @@ public class Application {
                                 System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");*/
                                 int codiceInt=Integer.parseInt(codice);
                                 System.out.println(td.verificaAbb(codiceInt));
-
                             } catch (Exception ex) {
                                 System.out.println("Errore verifica: " + ex.getMessage());
                             }
                         }
                         break;
                         case "3":
+                            String mOp="";
+                            System.out.println("Manutenzioni");
+                            System.out.println("inserire 1 per registrare una nuova manutenzione");
+                            System.out.println("inserire 2 per visualizzare le manutenzioni su un mezzo");
+                            mOp=scanner.nextLine();
+                            switch (mOp){
+                                case"1":
+                                    System.out.print("inserisci id del mezzo: ");
+                                    String idDelMez=scanner.nextLine();
+                                    long idLongMez=0;
+                                    Mezzi mezzDaMan=null;
+
+                                    try{
+                                         idLongMez=Long.parseLong(idDelMez);
+                                         mezzDaMan=mDao.findById(idLongMez);
+                                    } catch (Exception ex){
+                                        System.out.println("input non valido");
+                                        break;
+                                }
+                                    int durMan=0;
+                                    String mades="";
+                                    System.out.println("inserire la descrizione");
+                                    mades=scanner.nextLine();
+                                    System.out.println("inserire la durata in giorni (nummero intero)");
+                                    try{
+                                        durMan= Integer.parseInt(scanner.nextLine());
+                                    }catch (Exception ex){
+                                        System.out.println("input non valido");
+                                        break;
+                                }
+                                    LocalDateTime dayDiMo=LocalDateTime.now();
+                                    LocalDateTime dayAfter=dayDiMo.plusDays(durMan);
+
+                                    Manutenzioni newMan=new Manutenzioni(mades,dayDiMo,dayAfter,mezzDaMan);
+                                    manDao.save(newMan);
+
+                                    break;
+                                case"2":
+                            //-------------------------------------------------------
                             System.out.print("inserisci id del mezzo: ");
                             String inputMezzo = scanner.nextLine();
                             try {
@@ -350,6 +388,11 @@ public class Application {
                                 }
                             } catch (NumberFormatException e) {
                                 System.out.println("id non valido");
+                            }
+                            break;
+                                default:
+                                    System.out.println("input non valido");
+                                    break;
                             }
                             break;
                         case "4":

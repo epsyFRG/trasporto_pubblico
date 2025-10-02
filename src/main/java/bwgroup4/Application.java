@@ -213,7 +213,7 @@ public class Application {
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
                     System.out.println("Inserire 2 per verificare un abbonamento in base alla tessera ");
-                    System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
+                    System.out.println("Inserire 3 per le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
                     System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
                     System.out.println("Inserire 6 per assegnare un mezzo ad una tratta (nuova corsa) ");

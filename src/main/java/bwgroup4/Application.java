@@ -139,23 +139,7 @@ public class Application {
 
     }
 
-    //1) metodo getIsAdmin in base a id persona
-    //-------------------------------------------
-    // utente
-    //1) metodo nuovo abbonamento passando id venditore FATTO
-    //2) metodo nuovo biglietto pasando id venditore FATTO
-    //3) metodo setScadenza su tessera se dataScadenza < oggi
-    //4) nuova vidimazione fornendo codice biglietto e id mezzo FATTO
-    //5) fare la tessera se già non ce l'ha FATTO
-    //---------------------------------------------
-    //admin
-    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO
-    //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
-    //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
-    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO
-    //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO
-    //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO
-
+   
 
     public static void main(String[] args) {
 

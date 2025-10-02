@@ -161,10 +161,88 @@ public class Application {
 
     public static void main(String[] args) {
 
+
+//        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
+//        tDao.save(tratta1);
+//
+//        Mezzi mezzo1 = new Mezzi("CIAO", TipoMezzi.AUTOBUS, 30);
+//        mDao.save(mezzo1);
+//
+//        Corse corsa1 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 1, 8, 30),
+//                LocalDateTime.of(2025, 10, 1, 9, 15)
+//        );
+//        cDao.save(corsa1);
+//        Corse corsa2 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 1, 10, 0),
+//                LocalDateTime.of(2025, 10, 1, 10, 25)
+//        );
+//        cDao.save(corsa2);
+//        Corse corsa3 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 1, 14, 15),
+//                LocalDateTime.of(2025, 10, 1, 14, 35)
+//        );
+//        cDao.save(corsa3);
+//        Corse corsa4 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 2, 7, 0),
+//                LocalDateTime.of(2025, 10, 2, 8, 10)
+//        );
+//        cDao.save(corsa4);
+//        Corse corsa5 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 2, 16, 45),
+//                LocalDateTime.of(2025, 10, 2, 17, 30)
+//        );
+//        cDao.save(corsa5);
+//        Corse corsa6 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 3, 9, 20),
+//                LocalDateTime.of(2025, 10, 3, 10, 0)
+//        );
+//        cDao.save(corsa6);
+//        Corse corsa7 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 3, 11, 30),
+//                LocalDateTime.of(2025, 10, 3, 12, 45)
+//        );
+//        cDao.save(corsa7);
+//        Corse corsa8 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 4, 8, 0),
+//                LocalDateTime.of(2025, 10, 4, 8, 40)
+//        );
+//        cDao.save(corsa8);
+//        Corse corsa9 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 4, 13, 15),
+//                LocalDateTime.of(2025, 10, 4, 14, 5)
+//        );
+//        cDao.save(corsa9);
+//        Corse corsa10 = new Corse(
+//                mezzo1,
+//                tratta1,
+//                LocalDateTime.of(2025, 10, 5, 6, 45),
+//                LocalDateTime.of(2025, 10, 5, 7, 15)
+//        );
+//        cDao.save(corsa10);
         Scanner scanner = new Scanner(System.in);
         LocalDate today=LocalDate.now();
 
-
+        String op = "";
+        Persona utente = null;
 
         Persona p=pd.findById(2);
         Tessera t= new Tessera(p);
@@ -176,8 +254,7 @@ public class Application {
 
         //--------------------------------------------------------------------------------------------------
 
-        String op = "";
-        Persona utente = null;
+
         while(true){
             int ch=0;
             if(utente==null){
@@ -190,6 +267,7 @@ public class Application {
             try{
                 ch=Integer.parseInt(op);
                  utente=pd.findById(ch);
+
             }catch(Exception ex){
                 System.out.println("input non valido");
             }}
@@ -567,7 +645,39 @@ public class Application {
                             break;
                         }
                         case "3":
-                            System.out.println("-----");
+                            try {
+                                TypedQuery<Tessera> tesQuery = em.createQuery(
+                                        "SELECT t FROM Tessera t WHERE t.utente.id = :id",
+                                        Tessera.class
+                                );
+                                tesQuery.setParameter("id", utente.getId());
+                                List<Tessera> tessere = tesQuery.getResultList();
+
+                                if (tessere.isEmpty()) {
+                                    System.out.println("nessuna tessera trovata per questo utente");
+                                } else {
+                                    Tessera tessera = tessere.get(0);
+                                    LocalDate oggi = LocalDate.now();
+                                    LocalDate scadenza = tessera.getDataScadenza();
+
+                                    if (scadenza.isBefore(oggi)) {
+                                        tessera.setDataScadenza(oggi.plusYears(1));
+
+                                        em.getTransaction().begin();
+                                        em.merge(tessera);
+                                        em.getTransaction().commit();
+
+                                        System.out.println("tessera rinnovata, uova scadenza: " + tessera.getDataScadenza());
+                                    } else {
+                                        System.out.println("la tessera è ancora valida fino al " + scadenza);
+                                    }
+                                }
+                            } catch (Exception ex) {
+                                if (em.getTransaction().isActive()) {
+                                    em.getTransaction().rollback();
+                                }
+                                System.out.println("errore nel rinnovo tessera: " + ex.getMessage());
+                            }
                             break;
                         case "4":
                             System.out.println("Vidimazione biglietto");

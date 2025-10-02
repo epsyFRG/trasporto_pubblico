@@ -536,14 +536,16 @@ public class Application {
                             cDao.save(cor);
                             break;
 
-                        case "q": break;
+                        case "q":
+                            utente=null;
+                            break;
                         default:
                             System.out.println("input non valido");
                             break;
-                    }
+                    } /*
                     if(op.equals("q")){
                         break;
-                    }
+                    } */
 
                 }
                 //Lato utente
@@ -708,15 +710,18 @@ public class Application {
                             }
 
                             break;
-                        case "q": break;
+                        case "q":
+                            utente=null;
+                            break;
                         default:
                             System.out.println("input non valido");
                             break;
 
                     }
+                    /*
                     if(op.equals("q")){
                         break;
-                    }
+                    } */
 
                 }
             }

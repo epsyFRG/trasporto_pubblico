@@ -437,6 +437,18 @@ public class Application {
                                 System.out.println("input non valido");
                                 break;
                             }
+                            //----------check se il mezzo è in manutenzione---------
+                            List<Manutenzioni> manList=manDao.getManuPerMezzo(idM);
+                            LocalDateTime todayDT= LocalDateTime.now();
+                            if(!manList.isEmpty()){
+                                for(int i=0; i<manList.size(); i++){
+                                    if(manList.get(i).getdatafine()==null || manList.get(i).getdatafine().isAfter(todayDT)){
+                                        System.out.println("il mezzo selezionato è in manutenzione");
+                                        break;
+                                    }
+                                }
+                            }
+                            //-------------------------------------------------------
                             long durata=0;
                             System.out.println("inserire la durata in minuti (intero maggiore di 0)");
                             try {

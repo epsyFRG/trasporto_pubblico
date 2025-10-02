@@ -149,14 +149,6 @@ public class Application {
         String op = "";
         Persona utente = null;
 
-        Persona p=pd.findById(2);
-        Tessera t= new Tessera(p);
-       // td.save(t);
-        DistAuto d = new DistAuto("llklkj", true);
-        //disDao.save(d);
-        Persona admin=new Persona("amministratore","lkjlk",true);
-        //pd.save(admin);
-
         Faker faker=new Faker(new Locale("it"));
         String nome= faker.address().streetName();
 

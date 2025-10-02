@@ -277,7 +277,7 @@ public class Application {
                 if(utente.isAdmin()){
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
-                    System.out.println("Inserire 2 per verificare un abbonamento ");
+                    System.out.println("Inserire 2 per verificare un abbonamento in base alla tessera ");
                     System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
                     System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
@@ -356,16 +356,19 @@ public class Application {
                             break;
                         case "2": {
                             try {
-                                System.out.print("Abbonamento: ");
+                                System.out.print("codice Tessera: ");
                                 String codice = scanner.nextLine().trim();
                                 LocalDate oggi = java.time.LocalDate.now();
-                                Long c = em.createQuery(
+                               /* Long c = em.createQuery(
                                                 "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.abbonamento.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
                                                 Long.class)
                                         .setParameter("c", codice)
                                         .setParameter("oggi", oggi)
                                         .getSingleResult();
-                                System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");
+                                System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");*/
+                                int codiceInt=Integer.parseInt(codice);
+                                System.out.println(td.verificaAbb(codiceInt));
+
                             } catch (Exception ex) {
                                 System.out.println("Errore verifica: " + ex.getMessage());
                             }

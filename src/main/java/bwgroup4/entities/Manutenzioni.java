@@ -67,6 +67,7 @@ public class Manutenzioni {
     public String toString() {
         return "Manutenzioni{" +
                 "Id=" + Id +
+                ", descrizione=" + descrizione +
                 ", dataInizio=" + dataInizio +
                 ", dataFine=" + dataFine +
                 ", mezzi=" + (mezzi != null ? mezzi.getTipo() + " (id=" + mezzi.getId() + ")" : null) +

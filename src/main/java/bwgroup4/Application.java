@@ -502,13 +502,19 @@ public class Application {
                             //----------check se il mezzo è in manutenzione---------
                             List<Manutenzioni> manList=manDao.getManuPerMezzo(idM);
                             LocalDateTime todayDT= LocalDateTime.now();
+                            boolean isMan=false;
                             if(!manList.isEmpty()){
                                 for(int i=0; i<manList.size(); i++){
                                     if(manList.get(i).getdatafine()==null || manList.get(i).getdatafine().isAfter(todayDT)){
-                                        System.out.println("il mezzo selezionato è in manutenzione");
+                                        System.out.println("il mezzo selezionato è in manutenzione, ");
+                                        System.out.println("non può essere assegnato ad una tratta ");
+                                        isMan=true;
                                         break;
                                     }
                                 }
+                            }
+                            if(isMan){
+                                break;
                             }
                             //-------------------------------------------------------
                             long durata=0;

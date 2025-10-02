@@ -340,9 +340,12 @@ public class Application {
                                     String mades="";
                                     System.out.println("inserire la descrizione");
                                     mades=scanner.nextLine();
-                                    System.out.println("inserire la durata in giorni (nummero intero)");
+                                    System.out.println("inserire la durata in giorni (nummero intero maggiore di 0)");
                                     try{
                                         durMan= Integer.parseInt(scanner.nextLine());
+                                        if(durMan<=0){
+                                            throw new RuntimeException();
+                                        }
                                     }catch (Exception ex){
                                         System.out.println("input non valido");
                                         break;

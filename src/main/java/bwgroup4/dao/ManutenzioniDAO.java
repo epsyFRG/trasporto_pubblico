@@ -21,6 +21,7 @@ public class ManutenzioniDAO {
         tr.begin();
         em.persist(m);
         tr.commit();
+        System.out.println("manutenzione registrata");
     }
     public Manutenzioni findById(long id){
         Manutenzioni found = em.find(Manutenzioni.class, id);

@@ -2,22 +2,18 @@ package bwgroup4;
 
 import bwgroup4.dao.*;
 import bwgroup4.entities.*;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.TypedQuery;
+import jakarta.persistence.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+
+import com.github.javafaker.Faker;
 
 public class Application {
 
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("trasportopubblico");
-
+    static Scanner scanner = new Scanner(System.in);
     static EntityManager em = emf.createEntityManager();
     static CorseDAO cDao = new CorseDAO(em);
     static MezziDAO mDao = new MezziDAO(em);
@@ -30,6 +26,7 @@ public class Application {
     static VidimazioniDAO viDao = new VidimazioniDAO(em);
     static ManutenzioniDAO manDao = new ManutenzioniDAO(em);
     static VenditoreDAO venDao = new VenditoreDAO(em);
+    static PuntoVenditaDAO punDao=new PuntoVenditaDAO(em);
 
     public static void deletePerson(int idPersona) {
         TypedQuery<Tessera> tesQuery = em.createQuery("SELECT t FROM Tessera t WHERE t.utente.id = :id", Tessera.class);
@@ -48,6 +45,7 @@ public class Application {
         }
         try {
             pd.remove(idPersona);
+            System.out.println("persona eliminata dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
@@ -80,12 +78,13 @@ public class Application {
         }
         try {
             mDao.delete(idMezzo);
+            System.out.println("mezzo rimosso dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
     }
 
-    public static void deleteTratta(int idTratta) {
+    public static void deleteTratta(long idTratta) {
         TypedQuery<Corse> corseQuery = em.createQuery("SELECT c FROM Corse c WHERE c.tratta.id = :id", Corse.class);
         corseQuery.setParameter("id", idTratta);
         List<Corse> corseList = corseQuery.getResultList();
@@ -96,6 +95,7 @@ public class Application {
         }
         try {
             tDao.delete(idTratta);
+            System.out.println("tratta eliminata dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
@@ -111,6 +111,7 @@ public class Application {
         }
         try {
             biglDao.remove(codice);
+
         } catch (Exception ex) {
             System.out.println("codice non trovato");
         }
@@ -136,124 +137,146 @@ public class Application {
         }
         try {
             venDao.remove(idEmittente);
+            System.out.println("emittente rimosso dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
 
     }
 
-    //1) metodo getIsAdmin in base a id persona
-    //-------------------------------------------
-    // utente
-    //1) metodo nuovo abbonamento passando id venditore FATTO
-    //2) metodo nuovo biglietto pasando id venditore FATTO
-    //3) metodo setScadenza su tessera se dataScadenza < oggi
-    //4) nuova vidimazione fornendo codice biglietto e id mezzo FATTO
-    //5) fare la tessera se già non ce l'ha FATTO
-    //--------------------------------------------
-    //admin
-    //1) metodo getPerPeriodoAndEmitt su abbonamenti e biglietti (già fatto, da mettere nello switch) FATTO
-    //2) verifica abbonamento in base a tessera (già fatto, da mettere nello switch) FATTO
-    //3) metodo getmanutenzioni per mezzo (già fatto, da mettere nello switch) FATTO
-    //4) metodo getVidimazioni per mezzo per periodo tempo (già fatto, da mettere nello switch) FATTO
-    //5) metodo inserisco id tratta e id mezzo e ottengo media tempo effettivo FATTO
-    //6) assegnare mezzo a tratta, cioè creare una nuova corsa FATTO
+    public static void cancella(){
+
+        String input="";
+        System.out.println("cosa vuoi eliminare? inserire un numero oppure q per uscire ");
+        System.out.println("1 = elimina una persona dal db");
+        System.out.println("2 = elimina un mezzo dal db");
+        System.out.println("3 = elimina una tratta dal db");
+        System.out.println("4 = elimina un biglietto dal db");
+        System.out.println("5 = elimina un emittente dal db");
+        input=scanner.nextLine();
+
+        switch (input){
+            case "1":
+                int idP=0;
+                System.out.println("inserire l'id della persona da eliminare");
+                try{
+                idP= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deletePerson(idP);
+                break;
+
+            case "2":
+                long idM=0;
+                System.out.println("inserire l'id del mezzo da eliminare");
+                try{
+                    idM= Long.parseLong(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteMezzo(idM);
+                break;
+
+            case "3":
+                long idT=0;
+                System.out.println("inserire l'id della tratta da eliminare");
+                try{
+                    idT= Long.parseLong(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteTratta(idT);
+                break;
+
+            case "4":
+                int idB=0;
+                System.out.println("inserire l'id del biglietto da eliminare");
+                try{
+                    idB= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteBiglietto(idB);
+                System.out.println("biglietto rimosso dal database");
+                break;
+            case "5":
+                int idE=0;
+                System.out.println("inserire l'id dell'emittente da eliminare");
+                try{
+                    idE= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteEmittente(idE);
+                break;
+
+
+            case "q":
+                break;
+
+            default :
+                System.out.println("input non valido");
+                break;
+        }
+
+    }
+
+
 
     public static void main(String[] args) {
 
 
-//        Tratta tratta1 = new Tratta("Beverino", "Ceparana", 20);
-//        tDao.save(tratta1);
-//
-//        Mezzi mezzo1 = new Mezzi("CIAO", TipoMezzi.AUTOBUS, 30);
-//        mDao.save(mezzo1);
-//
-//        Corse corsa1 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 1, 8, 30),
-//                LocalDateTime.of(2025, 10, 1, 9, 15)
-//        );
-//        cDao.save(corsa1);
-//        Corse corsa2 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 1, 10, 0),
-//                LocalDateTime.of(2025, 10, 1, 10, 25)
-//        );
-//        cDao.save(corsa2);
-//        Corse corsa3 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 1, 14, 15),
-//                LocalDateTime.of(2025, 10, 1, 14, 35)
-//        );
-//        cDao.save(corsa3);
-//        Corse corsa4 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 2, 7, 0),
-//                LocalDateTime.of(2025, 10, 2, 8, 10)
-//        );
-//        cDao.save(corsa4);
-//        Corse corsa5 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 2, 16, 45),
-//                LocalDateTime.of(2025, 10, 2, 17, 30)
-//        );
-//        cDao.save(corsa5);
-//        Corse corsa6 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 3, 9, 20),
-//                LocalDateTime.of(2025, 10, 3, 10, 0)
-//        );
-//        cDao.save(corsa6);
-//        Corse corsa7 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 3, 11, 30),
-//                LocalDateTime.of(2025, 10, 3, 12, 45)
-//        );
-//        cDao.save(corsa7);
-//        Corse corsa8 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 4, 8, 0),
-//                LocalDateTime.of(2025, 10, 4, 8, 40)
-//        );
-//        cDao.save(corsa8);
-//        Corse corsa9 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 4, 13, 15),
-//                LocalDateTime.of(2025, 10, 4, 14, 5)
-//        );
-//        cDao.save(corsa9);
-//        Corse corsa10 = new Corse(
-//                mezzo1,
-//                tratta1,
-//                LocalDateTime.of(2025, 10, 5, 6, 45),
-//                LocalDateTime.of(2025, 10, 5, 7, 15)
-//        );
-//        cDao.save(corsa10);
-        Scanner scanner = new Scanner(System.in);
         LocalDate today=LocalDate.now();
 
         String op = "";
         Persona utente = null;
 
-        Persona p=pd.findById(2);
-        Tessera t= new Tessera(p);
-       // td.save(t);
-        DistAuto d = new DistAuto("llklkj", true);
-        //disDao.save(d);
-        Persona admin=new Persona("amministratore","lkjlk",true);
-        //pd.save(admin);
+        Faker faker=new Faker(new Locale("it"));
+        String nome= faker.address().streetName();
+
+        ArrayList<Persona> perList=new ArrayList<Persona>();
+        for(int i=0; i<10; i++){
+            perList.add(new Persona(faker.lordOfTheRings().character(),faker.backToTheFuture().character(), faker.bool().bool()));
+
+        }/*
+        for (int i=0; i<10; i++){
+            pd.save(perList.get(i));
+        } */
+
+        ArrayList<PuntoVendita> puntList=new ArrayList<PuntoVendita>();
+        for(int i=0; i<10; i++){
+            puntList.add(new PuntoVendita(faker.address().streetName()));
+        } /*
+        for(int i=0; i<10; i++){
+            punDao.save(puntList.get(i));
+        }
+*/
+        ArrayList <Tratta> tratList=new ArrayList<Tratta>();
+
+
+        for(int i=0; i<10; i++){
+            tratList.add(new Tratta(faker.address().streetName(),faker.address().streetName(), faker.number().numberBetween(20,70)));
+        }
+        /*for(int i=0; i<10; i++){
+            tDao.save(tratList.get(i));
+        } */
+
+
+       ArrayList<Mezzi> mezList=new ArrayList<Mezzi>();
+        for(int i=0; i<10; i++){
+            mezList.add(new Mezzi(faker.bothify("??###??"),faker.options().option(TipoMezzi.class)));
+        }
+       /* for(int i=0; i<10; i++){
+            mDao.save(mezList.get(i));
+        } */
 
         //--------------------------------------------------------------------------------------------------
-
 
         while(true){
             int ch=0;
@@ -277,11 +300,12 @@ public class Application {
                 if(utente.isAdmin()){
                     System.out.println("Amministratore");
                     System.out.println("Inserire 1 per visualizzare biglietti e/o abbonamenti ");
-                    System.out.println("Inserire 2 per verificare un abbonamento ");
-                    System.out.println("Inserire 3 per visualizzare le manutenzioni dei mezzi ");
+                    System.out.println("Inserire 2 per verificare un abbonamento in base alla tessera ");
+                    System.out.println("Inserire 3 per le manutenzioni dei mezzi ");
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
                     System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
                     System.out.println("Inserire 6 per assegnare un mezzo ad una tratta (nuova corsa) ");
+                    System.out.println("Inserire 7 per le opzioni di cancellazione ");
                     System.out.println("Inserire q per uscire");
 
                     op= scanner.nextLine();
@@ -356,22 +380,66 @@ public class Application {
                             break;
                         case "2": {
                             try {
-                                System.out.print("Abbonamento: ");
+                                System.out.print("codice Tessera: ");
                                 String codice = scanner.nextLine().trim();
                                 LocalDate oggi = java.time.LocalDate.now();
-                                Long c = em.createQuery(
-                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.abbonamento.cod11ice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
+                               /* Long c = em.createQuery(
+                                                "SELECT COUNT(a) FROM Abbonamento a " + "WHERE a.abbonamento.codice = :c AND :oggi BETWEEN a.dataInizio AND a.dataFine",
                                                 Long.class)
                                         .setParameter("c", codice)
                                         .setParameter("oggi", oggi)
                                         .getSingleResult();
-                                System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");
+                                System.out.println(c != null && c > 0 ? "Abbonamento valido" : "Abbonamento non valido");*/
+                                int codiceInt=Integer.parseInt(codice);
+                                System.out.println(td.verificaAbb(codiceInt));
                             } catch (Exception ex) {
                                 System.out.println("Errore verifica: " + ex.getMessage());
                             }
                         }
                         break;
                         case "3":
+                            String mOp="";
+                            System.out.println("Manutenzioni");
+                            System.out.println("inserire 1 per registrare una nuova manutenzione");
+                            System.out.println("inserire 2 per visualizzare le manutenzioni su un mezzo");
+                            mOp=scanner.nextLine();
+                            switch (mOp){
+                                case"1":
+                                    System.out.print("inserisci id del mezzo: ");
+                                    String idDelMez=scanner.nextLine();
+                                    long idLongMez=0;
+                                    Mezzi mezzDaMan=null;
+
+                                    try{
+                                         idLongMez=Long.parseLong(idDelMez);
+                                         mezzDaMan=mDao.findById(idLongMez);
+                                    } catch (Exception ex){
+                                        System.out.println("input non valido");
+                                        break;
+                                }
+                                    int durMan=0;
+                                    String mades="";
+                                    System.out.println("inserire la descrizione");
+                                    mades=scanner.nextLine();
+                                    System.out.println("inserire la durata in giorni (nummero intero maggiore di 0)");
+                                    try{
+                                        durMan= Integer.parseInt(scanner.nextLine());
+                                        if(durMan<=0){
+                                            throw new RuntimeException();
+                                        }
+                                    }catch (Exception ex){
+                                        System.out.println("input non valido");
+                                        break;
+                                }
+                                    LocalDateTime dayDiMo=LocalDateTime.now();
+                                    LocalDateTime dayAfter=dayDiMo.plusDays(durMan);
+
+                                    Manutenzioni newMan=new Manutenzioni(mades,dayDiMo,dayAfter,mezzDaMan);
+                                    manDao.save(newMan);
+
+                                    break;
+                                case"2":
+                            //-------------------------------------------------------
                             System.out.print("inserisci id del mezzo: ");
                             String inputMezzo = scanner.nextLine();
                             try {
@@ -388,6 +456,11 @@ public class Application {
                                 }
                             } catch (NumberFormatException e) {
                                 System.out.println("id non valido");
+                            }
+                            break;
+                                default:
+                                    System.out.println("input non valido");
+                                    break;
                             }
                             break;
                         case "4":
@@ -518,13 +591,19 @@ public class Application {
                             //----------check se il mezzo è in manutenzione---------
                             List<Manutenzioni> manList=manDao.getManuPerMezzo(idM);
                             LocalDateTime todayDT= LocalDateTime.now();
+                            boolean isMan=false;
                             if(!manList.isEmpty()){
                                 for(int i=0; i<manList.size(); i++){
                                     if(manList.get(i).getdatafine()==null || manList.get(i).getdatafine().isAfter(todayDT)){
-                                        System.out.println("il mezzo selezionato è in manutenzione");
+                                        System.out.println("il mezzo selezionato è in manutenzione, ");
+                                        System.out.println("non può essere assegnato ad una tratta ");
+                                        isMan=true;
                                         break;
                                     }
                                 }
+                            }
+                            if(isMan){
+                                break;
                             }
                             //-------------------------------------------------------
                             long durata=0;
@@ -544,14 +623,19 @@ public class Application {
                             cDao.save(cor);
                             break;
 
-                        case "q": break;
+                        case "q":
+                            utente=null;
+                            break;
+                        case "7":
+                            cancella();
+                            break;
                         default:
                             System.out.println("input non valido");
                             break;
-                    }
+                    } /*
                     if(op.equals("q")){
                         break;
-                    }
+                    } */
 
                 }
                 //Lato utente
@@ -716,15 +800,18 @@ public class Application {
                             }
 
                             break;
-                        case "q": break;
+                        case "q":
+                            utente=null;
+                            break;
                         default:
                             System.out.println("input non valido");
                             break;
 
                     }
+                    /*
                     if(op.equals("q")){
                         break;
-                    }
+                    } */
 
                 }
             }

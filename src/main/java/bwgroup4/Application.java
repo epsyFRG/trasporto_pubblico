@@ -13,7 +13,7 @@ import com.github.javafaker.Faker;
 public class Application {
 
     static EntityManagerFactory emf = Persistence.createEntityManagerFactory("trasportopubblico");
-
+    static Scanner scanner = new Scanner(System.in);
     static EntityManager em = emf.createEntityManager();
     static CorseDAO cDao = new CorseDAO(em);
     static MezziDAO mDao = new MezziDAO(em);
@@ -45,6 +45,7 @@ public class Application {
         }
         try {
             pd.remove(idPersona);
+            System.out.println("persona eliminata dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
@@ -77,12 +78,13 @@ public class Application {
         }
         try {
             mDao.delete(idMezzo);
+            System.out.println("mezzo rimosso dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
     }
 
-    public static void deleteTratta(int idTratta) {
+    public static void deleteTratta(long idTratta) {
         TypedQuery<Corse> corseQuery = em.createQuery("SELECT c FROM Corse c WHERE c.tratta.id = :id", Corse.class);
         corseQuery.setParameter("id", idTratta);
         List<Corse> corseList = corseQuery.getResultList();
@@ -93,6 +95,7 @@ public class Application {
         }
         try {
             tDao.delete(idTratta);
+            System.out.println("tratta eliminata dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
         }
@@ -108,6 +111,7 @@ public class Application {
         }
         try {
             biglDao.remove(codice);
+
         } catch (Exception ex) {
             System.out.println("codice non trovato");
         }
@@ -133,8 +137,92 @@ public class Application {
         }
         try {
             venDao.remove(idEmittente);
+            System.out.println("emittente rimosso dal database");
         } catch (Exception ex) {
             System.out.println("id non trovato");
+        }
+
+    }
+
+    public static void cancella(){
+
+        String input="";
+        System.out.println("cosa vuoi eliminare? inserire un numero oppure q per uscire ");
+        System.out.println("1 = elimina una persona dal db");
+        System.out.println("2 = elimina un mezzo dal db");
+        System.out.println("3 = elimina una tratta dal db");
+        System.out.println("4 = elimina un biglietto dal db");
+        System.out.println("5 = elimina un emittente dal db");
+        input=scanner.nextLine();
+
+        switch (input){
+            case "1":
+                int idP=0;
+                System.out.println("inserire l'id della persona da eliminare");
+                try{
+                idP= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deletePerson(idP);
+                break;
+
+            case "2":
+                long idM=0;
+                System.out.println("inserire l'id del mezzo da eliminare");
+                try{
+                    idM= Long.parseLong(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteMezzo(idM);
+                break;
+
+            case "3":
+                long idT=0;
+                System.out.println("inserire l'id della tratta da eliminare");
+                try{
+                    idT= Long.parseLong(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteTratta(idT);
+                break;
+
+            case "4":
+                int idB=0;
+                System.out.println("inserire l'id del biglietto da eliminare");
+                try{
+                    idB= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteBiglietto(idB);
+                System.out.println("biglietto rimosso dal database");
+                break;
+            case "5":
+                int idE=0;
+                System.out.println("inserire l'id dell'emittente da eliminare");
+                try{
+                    idE= Integer.parseInt(scanner.nextLine());}
+                catch (Exception ex){
+                    System.out.println("input non valido ");
+                    break;
+                }
+                deleteEmittente(idE);
+                break;
+
+
+            case "q":
+                break;
+
+            default :
+                System.out.println("input non valido");
+                break;
         }
 
     }
@@ -143,7 +231,7 @@ public class Application {
 
     public static void main(String[] args) {
 
-        Scanner scanner = new Scanner(System.in);
+
         LocalDate today=LocalDate.now();
 
         String op = "";
@@ -217,6 +305,7 @@ public class Application {
                     System.out.println("Inserire 4 per visualizzare i biglietti vidimati sui mezzi ");
                     System.out.println("Inserire 5 per visualizzare la durata media delle corse ");
                     System.out.println("Inserire 6 per assegnare un mezzo ad una tratta (nuova corsa) ");
+                    System.out.println("Inserire 7 per le opzioni di cancellazione ");
                     System.out.println("Inserire q per uscire");
 
                     op= scanner.nextLine();
@@ -536,6 +625,9 @@ public class Application {
 
                         case "q":
                             utente=null;
+                            break;
+                        case "7":
+                            cancella();
                             break;
                         default:
                             System.out.println("input non valido");
